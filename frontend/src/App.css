@@ -1,0 +1,110 @@
+/* Flexbox layout for full viewport height */
+.app-container {
+  display: flex;
+  height: 100vh; /* Ensure it takes up the entire viewport */
+  overflow: hidden;
+}
+
+/* Left and right sides with background images */
+.left-side,
+.right-side {
+  width: 50%; /* Each side takes 50% of the viewport width */
+  background-size: cover; /* Cover the entire container */
+  background-position: center; /* Center the background images */
+}
+
+/* Left side background image */
+.left-side {
+  background-image: url("https://resources.premierleague.com/photos/2024/08/18/28d0974e-3778-4c22-8c29-f253f9c92e51/2024-08-18T155323Z_372692886_UP1EK8I184Y5S_RTRMADP_3_SOCCER-ENGLAND-CHE-MCI-REPORT.JPG?width=1200&height=");
+}
+
+/* Right side background image */
+.right-side {
+  background-image: url("https://resources.premierleague.com/premierleague/photos/players/110x140/p118748.png");
+}
+
+/* Center the content in the middle of the page */
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  color: white;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Styling for the form */
+form {
+  width: 100%;
+  max-width: 500px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Input field styles */
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Button styling */
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Hover effect on buttons */
+button:hover {
+  background-color: #45a049;
+}
+
+/* Header text styling */
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* List styles (optional, if needed) */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* List item styles (for draggable items or similar) */
+li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  cursor: grab;
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 768px) {
+  .left-side,
+  .right-side {
+    width: 100%; /* Stack the sides vertically on small screens */
+    height: 50vh; /* Adjust the height for mobile */
+  }
+
+  .content {
+    width: 90%; /* Ensure the content doesn't overflow on small screens */
+  }
+}
