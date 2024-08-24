@@ -1,10 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import axios from "axios";
-
 import Prediction from "./models/predictions.js";
 import { connectDB } from "./config/db.js";
-
+import path from "path";
 import cors from "cors";
 
 dotenv.config();
@@ -15,6 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// API routes
 app.post("/api/prediction", async (req, res) => {
   const { user, teams } = req.body;
   console.log(req.body);
@@ -77,10 +77,18 @@ app.get("/api/standings", async (req, res) => {
   }
 });
 
+// Serve the React front-end
+const __dirname = path.resolve(); // Get the root directory of the project
+
+// Serve static files from the React app build
+app.use(express.static(path.join(__dirname, "/frontend/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/frontend/build", "index.html"));
+});
+
 // Start the server and connect to the database
 app.listen(5002, () => {
   connectDB();
-  console.log(
-    "Server is running on https://premier-league-predictor-1.onrender.com"
-  );
+  console.log("Server is running on https://premier-league-predictor-1.onrender.com");
 });
