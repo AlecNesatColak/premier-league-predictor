@@ -80,5 +80,7 @@ app.get("/api/standings", async (req, res) => {
 // Start the server and connect to the database
 app.listen(5002, () => {
   connectDB();
-  console.log("Server is running on http://localhost:5002");
+  console.log(
+    "Server is running on https://premier-league-predictor-1.onrender.com"
+  );
 });

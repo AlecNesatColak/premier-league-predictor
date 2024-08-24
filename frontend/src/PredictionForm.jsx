@@ -5,7 +5,6 @@ import axios from "axios";
 import "./PredictionForm.css";
 import { useNavigate } from "react-router-dom";
 
-
 // Helper to render Draggable item into a portal
 const usePortal = () => {
   const [portal] = useState(() => document.createElement("div"));
@@ -144,10 +143,13 @@ const PredictionForm = () => {
     }
 
     try {
-      await axios.post("http://localhost:5002/api/prediction", {
-        user,
-        teams,
-      });
+      await axios.post(
+        "https://premier-league-predictor-1.onrender.com/api/prediction",
+        {
+          user,
+          teams,
+        }
+      );
       alert("Prediction submitted successfully!");
       navigate("/");
     } catch (error) {

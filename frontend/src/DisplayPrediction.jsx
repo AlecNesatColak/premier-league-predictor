@@ -22,7 +22,9 @@ const DisplayPrediction = () => {
   // Fetch actual standings from Football Data API once and store in a local map
   const fetchActualPositions = async () => {
     try {
-      const response = await axios.get(`http://localhost:5002/api/standings`);
+      const response = await axios.get(
+        `https://premier-league-predictor-1.onrender.com/api/standings`
+      );
       const standings = response.data.standings[0].table;
 
       const positionMap = {};
@@ -82,7 +84,7 @@ const DisplayPrediction = () => {
     const fetchPrediction = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5002/api/prediction/${user}`
+          `https://premier-league-predictor-1.onrender.com/api/prediction/${user}`
         );
         setPrediction(response.data.data); // Store the user's prediction
       } catch (err) {
@@ -122,40 +124,38 @@ const DisplayPrediction = () => {
         </div>
         {prediction && (
           <div className="table-container">
-          <div className="team-column">
-            {prediction.teams.slice(0, 10).map((team, index) => {
-              const actualPosition = getActualPosition(team.name); // Get the actual position of the team
-              return (
-                <div key={index} className="draggable-item">
-                  <img
-                    src={team.logo}
-                    alt={`${team.name} logo`}
-                    width="40"
-                  />
-                  <span>{team.name}</span>
-                  <span className="actual-position">{actualPosition}</span> {/* Actual position on the right */}
-                </div>
-              );
-            })}
+            <div className="team-column">
+              {prediction.teams.slice(0, 10).map((team, index) => {
+                const actualPosition = getActualPosition(team.name); // Get the actual position of the team
+                return (
+                  <div key={index} className="draggable-item">
+                    <img src={team.logo} alt={`${team.name} logo`} width="40" />
+                    <span>{team.name}</span>
+                    <span className="actual-position">
+                      {actualPosition}
+                    </span>{" "}
+                    {/* Actual position on the right */}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="team-column">
+              {prediction.teams.slice(10, 20).map((team, index) => {
+                const actualPosition = getActualPosition(team.name); // Get the actual position of the team
+                return (
+                  <div key={index} className="draggable-item">
+                    <img src={team.logo} alt={`${team.name} logo`} width="40" />
+                    <span>{team.name}</span>
+                    <span className="actual-position">
+                      {actualPosition}
+                    </span>{" "}
+                    {/* Actual position on the right */}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        
-          <div className="team-column">
-            {prediction.teams.slice(10, 20).map((team, index) => {
-              const actualPosition = getActualPosition(team.name); // Get the actual position of the team
-              return (
-                <div key={index} className="draggable-item">
-                  <img
-                    src={team.logo}
-                    alt={`${team.name} logo`}
-                    width="40"
-                  />
-                  <span>{team.name}</span>
-                  <span className="actual-position">{actualPosition}</span> {/* Actual position on the right */}
-                </div>
-              );
-            })}
-          </div>
-        </div>        
         )}
       </div>
     </div>
