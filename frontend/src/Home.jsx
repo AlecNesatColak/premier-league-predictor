@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Home.css"
 
 function Home() {
   const navigate = useNavigate();
@@ -23,30 +24,18 @@ function Home() {
     <div className="app-container">
       <div className="left-side"></div>
       <div className="right-side"></div>
-      <div className="content">
-        <h1>Welcome to the Premier League Predictor</h1>
+      <div className="home-content">
+        <h1 className="text">Welcome to the Premier League Predictor</h1>
 
         <button
           onClick={handleFormClick}
-          style={{
-            padding: "10px 20px",
-            fontSize: "16px",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            marginBottom: "20px",
-          }}
+          className="primary-button"
         >
           Go to Form
         </button>
 
         <div style={{ marginTop: "20px" }}>
-          <label
-            htmlFor="username"
-            style={{ fontSize: "18px", marginBottom: "10px", display: "block" }}
-          >
+          <label htmlFor="username" className="text">
             Enter user name to see the prediction:
           </label>
           <input
@@ -55,36 +44,18 @@ function Home() {
             placeholder="Enter user name"
             value={user}
             onChange={(e) => setUser(e.target.value)}
-            style={{
-              padding: "10px",
-              fontSize: "16px",
-              width: "200px",
-              marginBottom: "10px",
-              border: "1px solid #ddd",
-              borderRadius: "5px",
-            }}
+            className="input-field"
           />
           <br />
           <button
             onClick={handlePredictionClick}
             disabled={user.trim() === ""}
-            style={{
-              padding: "10px 20px",
-              fontSize: "16px",
-              backgroundColor: user.trim() === "" ? "transparent" : "#28a745",
-              color: "#fff",
-              border: "none",
-              borderRadius: "5px",
-              cursor: user.trim() === "" ? "not-allowed" : "pointer",
-              marginLeft: "10px",
-            }}
+            className={`primary-button ${user.trim() === "" ? "disabled" : ""}`}
           >
             See Prediction
           </button>
 
-          {error && (
-            <div style={{ color: "red", marginTop: "10px" }}>{error}</div>
-          )}
+          {error && <div className="error-message">{error}</div>}
         </div>
       </div>
     </div>

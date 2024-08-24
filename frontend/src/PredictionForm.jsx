@@ -1,6 +1,24 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import ReactDOM from "react-dom";
 import axios from "axios";
+import "./PredictionForm.css";
+import { useNavigate } from "react-router-dom";
+
+
+// Helper to render Draggable item into a portal
+const usePortal = () => {
+  const [portal] = useState(() => document.createElement("div"));
+
+  React.useEffect(() => {
+    document.body.appendChild(portal);
+    return () => {
+      document.body.removeChild(portal);
+    };
+  }, [portal]);
+
+  return portal;
+};
 
 // The teams array with logos
 const initialTeams = [
@@ -89,28 +107,34 @@ const initialTeams = [
 const PredictionForm = () => {
   const [teams, setTeams] = useState(initialTeams);
   const [user, setUser] = useState("");
+  const navigate = useNavigate();
 
-  const getItemStyle = (isDragging, draggableStyle) => ({
-    userSelect: "none",
-    padding: 16,
-    margin: `0 0 8px 0`,
-    background: isDragging ? "lightgreen" : "#fff",
-    borderRadius: "5px",
-    boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.1)",
-    display: "flex",
-    alignItems: "center",
-    ...draggableStyle,
-  });
+  const portal = usePortal();
+
+  const reorderTeams = (sourceIndex, destinationIndex) => {
+    const reorderedTeams = [...teams];
+    const [removed] = reorderedTeams.splice(sourceIndex, 1);
+    reorderedTeams.splice(destinationIndex, 0, removed);
+    setTeams(reorderedTeams);
+  };
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
-
-    const reorderedTeams = [...teams];
-    const [removed] = reorderedTeams.splice(result.source.index, 1);
-    reorderedTeams.splice(result.destination.index, 0, removed);
-
-    setTeams(reorderedTeams);
+    reorderTeams(result.source.index, result.destination.index);
   };
+
+  const getItemStyle = (isDragging, draggableStyle) => ({
+    userSelect: "none",
+    padding: 10,
+    margin: `5px 5px 8px 5px`,
+    background: isDragging ? "lightgreen" : "#fff",
+    borderRadius: "5px",
+    boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.1)",
+    display: "flex",
+    alignItems: "center",
+    border: "1px solid rgba(0, 0, 0, 0.1)",
+    ...draggableStyle,
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -125,60 +149,132 @@ const PredictionForm = () => {
         teams,
       });
       alert("Prediction submitted successfully!");
+      navigate("/");
     } catch (error) {
       console.error("Error submitting prediction:", error);
       alert("There was an issue submitting your prediction. Please try again.");
     }
   };
 
+  const DraggableItem = ({ provided, snapshot, children }) => {
+    if (!snapshot.isDragging) {
+      return (
+        <div
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          style={getItemStyle(
+            snapshot.isDragging,
+            provided.draggableProps.style
+          )}
+        >
+          {children}
+        </div>
+      );
+    }
+
+    return ReactDOM.createPortal(
+      <div
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+      >
+        {children}
+      </div>,
+      portal
+    );
+  };
+
   return (
-    <div className="App">
-      <h1>Premier League Prediction Form</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={user}
-          onChange={(e) => setUser(e.target.value)}
-          placeholder="Enter your name"
-        />
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="teams">
-            {(provided) => (
-              <ul {...provided.droppableProps} ref={provided.innerRef}>
-                {teams.map((team, index) => (
-                  <Draggable
-                    key={team.name}
-                    draggableId={`${team.name}-${index}`}
-                    index={index}
+    <div className="app-container">
+      <div className="left-side"></div>
+      <div className="right-side"></div>
+      <div className="form-content" onSubmit={handleSubmit}>
+        <h1 className="text">Premier League Prediction Form</h1>
+        <form className="prediction-form">
+          <div className="table-container">
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <Droppable droppableId="teams-column-1">
+                {(provided) => (
+                  <div
+                    className="team-column"
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
                   >
-                    {(provided, snapshot) => (
-                      <li
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style
-                        )}
+                    {teams.slice(0, 10).map((team, index) => (
+                      <Draggable
+                        key={team.name}
+                        draggableId={`${team.name}-${index}`}
+                        index={index}
                       >
-                        <img
-                          src={team.logo}
-                          alt={`${team.name} logo`}
-                          width="40"
-                          style={{ marginRight: "10px" }}
-                        />
-                        {team.name}
-                      </li>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </ul>
-            )}
-          </Droppable>
-        </DragDropContext>
-        <button type="submit">Submit Prediction</button>
-      </form>
+                        {(provided, snapshot) => (
+                          <DraggableItem
+                            provided={provided}
+                            snapshot={snapshot}
+                          >
+                            <img
+                              src={team.logo}
+                              alt={`${team.name} logo`}
+                              width="40"
+                              style={{ marginRight: "10px" }}
+                            />
+                            {team.name}
+                          </DraggableItem>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+
+              <Droppable droppableId="teams-column-2">
+                {(provided) => (
+                  <div
+                    className="team-column"
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    {teams.slice(10, 20).map((team, index) => (
+                      <Draggable
+                        key={team.name}
+                        draggableId={`${team.name}-${index + 10}`}
+                        index={index + 10}
+                      >
+                        {(provided, snapshot) => (
+                          <DraggableItem
+                            provided={provided}
+                            snapshot={snapshot}
+                          >
+                            <img
+                              src={team.logo}
+                              alt={`${team.name} logo`}
+                              width="40"
+                              style={{ marginRight: "10px" }}
+                            />
+                            {team.name}
+                          </DraggableItem>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </div>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            value={user}
+            onChange={(e) => setUser(e.target.value)}
+            required
+            className="name-input"
+          />
+          <button type="submit">Submit Prediction</button>
+        </form>
+      </div>
     </div>
   );
 };

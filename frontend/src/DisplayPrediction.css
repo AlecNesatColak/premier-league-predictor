@@ -1,0 +1,151 @@
+
+/* Flexbox container for left and right backgrounds */
+.app-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.left-side,
+.right-side {
+  width: 50%;
+  background-position: center;
+}
+
+/* Zoom out the background image */
+.left-side {
+  background-image: url("https://resources.premierleague.com/photos/2024/08/18/28d0974e-3778-4c22-8c29-f253f9c92e51/2024-08-18T155323Z_372692886_UP1EK8I184Y5S_RTRMADP_3_SOCCER-ENGLAND-CHE-MCI-REPORT.JPG?width=1200&height=");
+  background-size: 177%;
+}
+
+.right-side {
+  background-image: url("https://resources.premierleague.com/photos/premierleague/photo/2024/08/17/f46b8810-487d-4917-b8f6-a5af59eb9568/2167141136.jpg?width=1200&height=");
+  background-size: 177%;
+}
+
+.form-background {
+  color: rgba(0 0, 0, 0.6);
+}
+
+/* Center the content in the middle of the page */
+.display-form-content {
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  color: black;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 39%;
+  align-items: center;
+}
+
+.draggable-item img {
+  margin-right: 10px;
+}
+
+.draggable-item span {
+  flex-grow: 1;
+}
+
+.actual-position {
+  font-weight: bold;
+  color: #ff5733;
+  text-align: right;
+}
+
+/* Container for the two columns */
+.table-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Styling for each column */
+.team-column {
+  width: 40%; /* Reduced width to make the columns smaller */
+}
+
+.draggable-item {
+  padding: 10px; /* Reduced padding for a smaller item size */
+  margin-bottom: 8px;
+  background-color: white;
+  border-radius: 5px;
+  border: 2px solid #4caf50; /* Added border for each item */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  cursor: grab;
+}
+
+.draggable-item img {
+  margin-right: 10px;
+  width: 30px; /* Reduced image size */
+}
+
+
+/* Styling for the form */
+form {
+  background-color: rgba(0, 0, 0, 0.9);
+  width: 100%;
+  max-width: 900px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.display-form {
+  position: relative;
+  left: 15%;
+}
+
+/* Input field styles */
+input[type="text"] {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Button styling */
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Hover effect on buttons */
+button:hover {
+  background-color: #45a049;
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 768px) {
+  .left-side,
+  .right-side {
+    width: 100%;
+    height: 50vh;
+  }
+
+  .content {
+    width: 90%;
+  }
+
+  .table-container {
+    flex-direction: column;
+  }
+
+  .team-column {
+    width: 100%;
+  }
+}

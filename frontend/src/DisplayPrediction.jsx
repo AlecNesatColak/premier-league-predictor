@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import "./DisplayPrediction.css";
 
 const DisplayPrediction = () => {
   const navigate = useNavigate();
@@ -11,25 +12,69 @@ const DisplayPrediction = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const normalizeTeamName = (name) => {
+    return name
+      .toLowerCase()
+      .replace(/fc|afc|[\W_]+/g, "") // Remove 'fc', 'afc', and non-alphanumeric characters
+      .trim(); // Trim any leading/trailing spaces
+  };
+
   // Fetch actual standings from Football Data API once and store in a local map
   const fetchActualPositions = async () => {
     try {
       const response = await axios.get(`http://localhost:5002/api/standings`);
-      console.log("API Response Data: ", response.data);
       const standings = response.data.standings[0].table;
 
-      // Create a map of team names to their positions
       const positionMap = {};
-      standings.forEach((standing) => {
-        positionMap[standing.team.name] = standing.position;
+      let currentPosition = 1; // Start with the first position
+      let previousPosition = null; // To track the previous position for comparison
+
+      standings.forEach((standing, index) => {
+        // Check if the previous team's position is the same as the current one
+        if (previousPosition === standing.position) {
+          currentPosition += 1; // Increment the position if the current one is tied
+        } else {
+          currentPosition = standing.position; // Assign the correct position if not tied
+        }
+
+        positionMap[standing.team.name] = currentPosition; // Map the team name to the adjusted position
+        previousPosition = standing.position; // Update previousPosition to the current one
+
+        // Logging to check the mapping
+        console.log(
+          `Mapped ${standing.team.name} to position ${currentPosition}`
+        );
       });
 
-      setTeamPositionMap(positionMap); // Store the position map
+      setTeamPositionMap(positionMap); // Store the position map with updated positions
       setPositionsFetched(true); // Indicate positions are fetched
     } catch (error) {
       console.error("Error fetching data:", error); // Log the full error
       setError("Error fetching data from Football Data API.");
     }
+  };
+
+  // Function to get the actual position of the team from the local data structure
+  const getActualPosition = (teamName) => {
+    const normalizedPredictionName = normalizeTeamName(teamName);
+
+    // Log the normalized prediction team name
+    console.log(`Looking for: ${normalizedPredictionName}`);
+
+    // Loop over the teamPositionMap entries
+    for (const [apiTeamName, position] of Object.entries(teamPositionMap)) {
+      const normalizedApiTeamName = normalizeTeamName(apiTeamName);
+
+      // Log the normalized API team name and try to match
+      if (normalizedApiTeamName.includes(normalizedPredictionName)) {
+        console.log(
+          `Matched: ${normalizedPredictionName} with ${normalizedApiTeamName}`
+        );
+        return position; // Return the found position
+      }
+    }
+
+    return "Not found: N/A"; // Return "N/A" if not found
   };
 
   // Fetch the user's prediction from the backend
@@ -51,88 +96,67 @@ const DisplayPrediction = () => {
     fetchActualPositions(); // Call to fetch positions
   }, [user]);
 
-  // Function to get the actual position of the team from the local data structure
-  const getActualPosition = (teamName) => {
-    if (!positionsFetched || !teamPositionMap) return "Not Fetched"; // Check if positions have been fetched
-    return teamPositionMap[teamName] || "N/A"; // Return position or "N/A" if not found
-  };
-
-  // Update the item styling for display prediction list to match `PredictionForm`
-  const getItemStyle = (isDragging, draggableStyle) => ({
-    userSelect: "none",
-    padding: 16,
-    margin: `0 0 8px 0`,
-    background: isDragging ? "lightgreen" : "#fff",
-    borderRadius: "5px",
-    boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.1)",
-    display: "flex",
-    alignItems: "center",
-    ...draggableStyle,
-  });
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="App">
-      <h1>{user}'s Premier League Prediction</h1>
-      {prediction && (
-        <ul style={{ listStyleType: "none", padding: 0 }}>
-          {prediction.teams.map((team, index) => {
-            const actualPosition = getActualPosition(team.name); // Get the actual position of the team
-
-            return (
-              <li
-                key={index}
-                style={getItemStyle(false, {})} // Reuse the item style from `PredictionForm`
-              >
-                <img
-                  src={team.logo}
-                  alt={`${team.name} logo`}
-                  width="40"
-                  style={{ marginRight: "10px" }}
-                />
-                <span>
-                  {team.name} - User's Prediction: {index + 1}, Actual Position:{" "}
-                  {actualPosition}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-      <div>
-        <button
-          onClick={() => navigate("/")}
-          style={{
-            padding: "10px 20px",
-            fontSize: "16px",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            marginTop: "20px",
-          }}
-        >
-          Go Back to Home
-        </button>
-        <br />
-        <button
-          onClick={() => navigate("/form")}
-          style={{
-            padding: "10px 20px",
-            fontSize: "16px",
-            backgroundColor: "#28a745",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            marginTop: "10px",
-          }}
-        >
-          Go to Form
-        </button>
+    <div className="app-container">
+      <div className="left-side"></div>
+      <div className="right-side"></div>
+      <div className="display-form-content">
+        <h1 className="text">{user}'s Premier League Prediction</h1>
+        <div>
+          <button
+            onClick={() => navigate("/")}
+            style={{
+              width: 150,
+              fontSize: "16px",
+              backgroundColor: "#007bff",
+              color: "#fff",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Go Back to Home
+          </button>
+        </div>
+        {prediction && (
+          <div className="table-container">
+          <div className="team-column">
+            {prediction.teams.slice(0, 10).map((team, index) => {
+              const actualPosition = getActualPosition(team.name); // Get the actual position of the team
+              return (
+                <div key={index} className="draggable-item">
+                  <img
+                    src={team.logo}
+                    alt={`${team.name} logo`}
+                    width="40"
+                  />
+                  <span>{team.name}</span>
+                  <span className="actual-position">{actualPosition}</span> {/* Actual position on the right */}
+                </div>
+              );
+            })}
+          </div>
+        
+          <div className="team-column">
+            {prediction.teams.slice(10, 20).map((team, index) => {
+              const actualPosition = getActualPosition(team.name); // Get the actual position of the team
+              return (
+                <div key={index} className="draggable-item">
+                  <img
+                    src={team.logo}
+                    alt={`${team.name} logo`}
+                    width="40"
+                  />
+                  <span>{team.name}</span>
+                  <span className="actual-position">{actualPosition}</span> {/* Actual position on the right */}
+                </div>
+              );
+            })}
+          </div>
+        </div>        
+        )}
       </div>
     </div>
   );

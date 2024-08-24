@@ -57,7 +57,7 @@ app.get("/api/prediction/:user", async (req, res) => {
   }
 });
 
-const API_TOKEN = "a1948b97525d48e2b55d2b77dcdb18a4";
+const API_TOKEN = process.env.PREM_API_TOKEN;
 
 // Route to fetch Premier League standings
 app.get("/api/standings", async (req, res) => {
