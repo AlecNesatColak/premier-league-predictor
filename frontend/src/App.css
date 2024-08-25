@@ -3,9 +3,10 @@ html,
 body {
   margin: 0;
   padding: 0;
+  align-items: center;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
-  height: auto; /* Set height to auto to allow the content to grow */
+  height: 100vh; /* Set height to auto to allow the content to grow */
   min-height: 100%; /* Ensure the body takes at least full height */
   overflow-y: auto; /* Allow vertical scrolling */
 }

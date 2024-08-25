@@ -77,6 +77,25 @@ app.get("/api/standings", async (req, res) => {
   }
 });
 
+app.get("/api/matchweek", async (req, res) => {
+  const matchday = req.query.matchday || 1; // Default to matchday 1 if not provided
+
+  try {
+    const response = await axios.get(
+      `https://api.football-data.org/v4/competitions/PL/matches?matchday=${matchday}`,
+      {
+        headers: { "X-Auth-Token": API_TOKEN },
+      }
+    );
+    res.json(response.data); // Send back the API response as JSON
+  } catch (error) {
+    console.error("Error fetching data:", error.message || error); // Log the error message
+    res
+      .status(500)
+      .json({ message: "Error fetching data from Football Data API" });
+  }
+});
+
 // Serve the React front-end
 const __dirname = path.resolve(); // Get the root directory of the project
 
@@ -90,5 +109,5 @@ app.get("*", (req, res) => {
 // Start the server and connect to the database
 app.listen(5002, () => {
   connectDB();
-  console.log("Server is running on https://premier-league-predictor-1.onrender.com");
+  console.log("Server is running on http://localhost:5002");
 });

@@ -1,0 +1,44 @@
+.tables-container {
+  align-items: center;
+  display: inline-block; /* Ensures each table takes up its space horizontally */
+  margin-right: 20px;
+}
+
+.matchweek-container {
+  display: flex;
+  overflow-x: scroll; /* Enable horizontal scrolling */
+  scroll-behavior: smooth; /* Smooth scrolling effect */
+  width: 100%; /* Full width of the container */
+  white-space: nowrap; /* Prevent line breaks, keep tables inline */
+  padding: 20px 0;
+}
+
+.table-scroll-container {
+  min-width: 600px; /* Ensure the table takes enough space to make scrolling necessary */
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+img {
+  width: 40px;
+  height: auto;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}

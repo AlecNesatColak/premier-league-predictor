@@ -19,6 +19,7 @@ body {
 .right-side {
   width: 50%;
   background-position: center;
+  height: 100vh;
 }
 
 .left-side {
