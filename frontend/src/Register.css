@@ -1,0 +1,15 @@
+.text {
+  color: white;
+  padding: none;
+  text-align: center;
+}
+
+.password{
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}

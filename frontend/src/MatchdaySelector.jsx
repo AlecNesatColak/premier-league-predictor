@@ -24,6 +24,12 @@ const MatchdaySelector = () => {
           </div>
         ))}
       </div>
+      <button
+          onClick={navigate("/")}
+          className="primary-button"
+        >
+          Go Home
+        </button>
     </div>
   );
 };

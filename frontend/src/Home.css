@@ -6,31 +6,16 @@ body {
   box-sizing: border-box;
   font-family: Arial, sans-serif;
   height: 100%;
+  background-image: url("./assets/zigzag-magenta-background-epl-english-premier-league-thumbnail-video-print-web-background-free-vector.jpg");
 }
 
 /* Flexbox container for the left and right backgrounds */
-.app-container {
+.home-app-container {
   display: flex;
   height: 100vh;
   overflow: hidden;
 }
 
-.left-side,
-.right-side {
-  width: 50%;
-  background-position: center;
-  height: 100vh;
-}
-
-.left-side {
-  background-image: url("https://resources.premierleague.com/photos/2024/08/18/28d0974e-3778-4c22-8c29-f253f9c92e51/2024-08-18T155323Z_372692886_UP1EK8I184Y5S_RTRMADP_3_SOCCER-ENGLAND-CHE-MCI-REPORT.JPG?width=1200&height=");
-  background-size: 177%;
-}
-
-.right-side {
-  background-image: url("https://resources.premierleague.com/photos/premierleague/photo/2024/08/17/f46b8810-487d-4917-b8f6-a5af59eb9568/2167141136.jpg?width=1200&height=");
-  background-size: 177%;
-}
 
 /* Content Centering */
 /* Center the content in the middle of the page */
@@ -64,6 +49,12 @@ form {
 }
 
 .text {
+  color: white;
+  padding: none;
+  text-align: center;
+}
+
+.text2{
   color: white;
   padding: none;
   text-align: center;

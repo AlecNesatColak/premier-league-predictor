@@ -9,6 +9,7 @@ body {
   height: 100vh; /* Set height to auto to allow the content to grow */
   min-height: 100%; /* Ensure the body takes at least full height */
   overflow-y: auto; /* Allow vertical scrolling */
+  background-image: "./assets/zigzag-magenta-background-epl-english-premier-league-thumbnail-video-print-web-background-free-vector.jpg";
 }
 
 /* Styling for the form */

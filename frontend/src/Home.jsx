@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css"
+import Navbar from "./components/Navbar";
 
 function Home() {
   const navigate = useNavigate();
@@ -21,9 +22,8 @@ function Home() {
   };
 
   return (
-    <div className="app-container">
-      <div className="left-side"></div>
-      <div className="right-side"></div>
+    <div className="home-app-container">
+      <Navbar />
       <div className="home-content">
         <h1 className="text">Welcome to the Premier League Predictor</h1>
 

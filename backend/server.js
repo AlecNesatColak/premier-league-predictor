@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import axios from "axios";
 import Prediction from "./models/predictions.js";
+import User from "./models/users.js";
 import { connectDB } from "./config/db.js";
 import path from "path";
 import cors from "cors";
@@ -95,6 +96,60 @@ app.get("/api/matchweek", async (req, res) => {
       .json({ message: "Error fetching data from Football Data API" });
   }
 });
+
+app.post("/register", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Validate input
+    if (!username || !password) {
+      return res.status(400).json({ error: "Username and password are required" });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ error: "User already exists" });
+    }
+
+    // Create and save new user
+    const newUser = new User({ username, password });
+    await newUser.save();
+
+    res.json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error("Error registering user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Validate input
+    if (!username || !password) {
+      return res.status(400).json({ error: "Username and password are required" });
+    }
+
+    // Check if user exists
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
+
+    // Check if password is correct
+    if (password !== user.password) {
+      return res.status(400).json({ error: "Invalid password" });
+    }
+
+    res.json({ message: "Login successful" });
+  } catch (error) {
+    console.error("Error logging in user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 // Serve the React front-end
 const __dirname = path.resolve(); // Get the root directory of the project

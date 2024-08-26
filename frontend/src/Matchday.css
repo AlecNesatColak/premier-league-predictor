@@ -1,44 +1,68 @@
+/* Adjust the size of the team logos */
+.matchweek-container img {
+  width: 40px; /* Adjust the width of the logos */
+  height: auto; /* Keep the aspect ratio */
+  vertical-align: middle; /* Align vertically with the text */
+}
+
+/* Container for side-by-side tables */
 .tables-container {
-  align-items: center;
-  display: inline-block; /* Ensures each table takes up its space horizontally */
-  margin-right: 20px;
-}
-
-.matchweek-container {
   display: flex;
-  overflow-x: scroll; /* Enable horizontal scrolling */
-  scroll-behavior: smooth; /* Smooth scrolling effect */
-  width: 100%; /* Full width of the container */
-  white-space: nowrap; /* Prevent line breaks, keep tables inline */
-  padding: 20px 0;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  gap: 10px; /* Adds spacing between the matchweek and prediction form */
 }
 
-.table-scroll-container {
-  min-width: 600px; /* Ensure the table takes enough space to make scrolling necessary */
+/* Matchweek table */
+.matchweek-container {
+  width: 60%; /* Adjust width as necessary */
+}
+
+.prediction-form-container {
+  width: 35%; /* Adjust width as necessary */
+}
+
+.matchday-h1{
+    text-align: center;
+    color: white;
 }
 
 table {
+  width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  color: white;
+  background-color: white;
 }
 
 th, td {
   padding: 10px;
-  border: 1px solid #ddd;
   text-align: left;
+  border-bottom: 1px solid white;
+  color: #37003c;
 }
 
-img {
-  width: 40px;
-  height: auto;
-  margin-right: 10px;
-  vertical-align: middle;
+.matchday-button {
+  padding: 10px 15px;
+  background-color: #4caf50;
+  color: #37003c;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
 }
 
-th {
-  background-color: #f4f4f4;
+button:hover {
+  background-color: #45a049;
 }
 
-tr:nth-child(even) {
-  background-color: #f9f9f9;
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.button-container button {
+  margin: 0 10px;
 }

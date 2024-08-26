@@ -4,14 +4,32 @@ import "./Matchday.css"; // Import your CSS file
 
 // Component to display a table of matches
 const Matchweek = ({ matches }) => {
+
+const convertToEST = (utcDate) => {
+  const date = new Date(utcDate); // Convert the string to a Date object
+  return date.toLocaleString("en-US", {
+    timeZone: "America/New_York", // Timezone for EST/EDT
+    weekday: "short", // Short weekday format, e.g., "Sun"
+    year: "numeric",
+    month: "short", // Short month format, e.g., "Aug"
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true, // Display in 12-hour format (AM/PM)
+  });
+};
+
+
   return (
-    <div className="tables-container">
+    <div className="matchweek-container">
       <table>
         <thead>
           <tr>
             <th>Home Team</th>
             <th>Away Team</th>
             <th>Score</th>
+            <th>Match Status</th>
           </tr>
         </thead>
         <tbody>
@@ -28,6 +46,9 @@ const Matchweek = ({ matches }) => {
               <td>
                 {match.score.fullTime.home} - {match.score.fullTime.away}
               </td>
+              <td>
+                {match.status === "FINISHED" || match.status === "LIVE" ? match.status : convertToEST(match.utcDate)} 
+              </td>
             </tr>
           ))}
         </tbody>
@@ -36,11 +57,41 @@ const Matchweek = ({ matches }) => {
   );
 };
 
+const PredictScores = ({ matches }) => {
+  return (
+    <div className="prediction-form-container">
+      <form>
+        <table>
+          <thead>
+            <tr>
+              <th>Home Score</th>
+              <th>Away Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {matches.map((match) => (
+              <tr key={match.id}>
+                <td>
+                  <input type="number" name="homeScore" />
+                </td>
+                <td>
+                  <input type="number" name="awayScore" />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button type="submit">Submit Predictions</button>
+      </form>
+    </div>
+  );
+};
+
 const Matchday = () => {
   const { matchdayNumber } = useParams(); // Get matchday number from URL
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); // Use navigate for "Next Matchday" button
+  const navigate = useNavigate(); // Use navigate for "Next Matchday" and "Show Selections" buttons
 
   useEffect(() => {
     // Fetch matches for the current matchday
@@ -70,19 +121,30 @@ const Matchday = () => {
     }
   };
 
+  // Handle showing the user's predictions
+  const handleShowPredictions = () => {
+    const user = "username"; // Replace with actual username logic
+    navigate(`/matchday/${matchdayNumber}/${user}`); // Navigate to matchday predictions page
+  };
+
+
   return (
     <div className="App">
-      <h1>Premier League Matchday {matchdayNumber}</h1>
+      <h1 className="matchday-h1">Premier League Matchday {matchdayNumber}</h1>
       {loading ? (
         <p>Loading...</p>
       ) : matches.length > 0 ? (
-        <div>
+        <div className="tables-container">
           <Matchweek matches={matches} />
-          <button onClick={handleNextMatchday}>Next Matchday</button>
+          <PredictScores matches={matches} />
         </div>
       ) : (
         <p>No matches found for matchday {matchdayNumber}</p>
       )}
+      <div className="button-container">
+        <button className="matchday-button" onClick={handleNextMatchday}>Next Matchday</button>
+        <button className="matchday-button" onClick={handleShowPredictions}>Show Your Selections</button>
+      </div>
     </div>
   );
 };

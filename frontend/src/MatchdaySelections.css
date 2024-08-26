@@ -1,0 +1,36 @@
+.matchday-selections-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.match-schedule, .user-predictions {
+  width: 48%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
