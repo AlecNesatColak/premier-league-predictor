@@ -25,7 +25,7 @@ const Navbar = () => {
       if (isAuthenticated) {
         try {
           const token = localStorage.getItem("authToken");
-          const response = await axios.get("http://https://premier-league-predictor-1.onrender.com/me", {
+          const response = await axios.get("https://premier-league-predictor-1.onrender.com/me", {
             headers: {
               Authorization: `Bearer ${token}`, // Send the token as a Bearer token
             },
