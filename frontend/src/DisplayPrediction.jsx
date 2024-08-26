@@ -42,10 +42,6 @@ const DisplayPrediction = () => {
         positionMap[standing.team.name] = currentPosition; // Map the team name to the adjusted position
         previousPosition = standing.position; // Update previousPosition to the current one
 
-        // Logging to check the mapping
-        console.log(
-          `Mapped ${standing.team.name} to position ${currentPosition}`
-        );
       });
 
       setTeamPositionMap(positionMap); // Store the position map with updated positions
@@ -60,18 +56,15 @@ const DisplayPrediction = () => {
   const getActualPosition = (teamName) => {
     const normalizedPredictionName = normalizeTeamName(teamName);
 
-    // Log the normalized prediction team name
-    console.log(`Looking for: ${normalizedPredictionName}`);
-
     // Loop over the teamPositionMap entries
     for (const [apiTeamName, position] of Object.entries(teamPositionMap)) {
       const normalizedApiTeamName = normalizeTeamName(apiTeamName);
 
       // Log the normalized API team name and try to match
       if (normalizedApiTeamName.includes(normalizedPredictionName)) {
-        console.log(
-          `Matched: ${normalizedPredictionName} with ${normalizedApiTeamName}`
-        );
+        //console.log(
+          //`Matched: ${normalizedPredictionName} with ${normalizedApiTeamName}`
+        //);
         return position; // Return the found position
       }
     }

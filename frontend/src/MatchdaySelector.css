@@ -1,5 +1,20 @@
 .matchday-selector-container {
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  margin: 70px auto; /* Add top margin of 70px to account for the navbar */
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  color: black;
   text-align: center;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 90%; /* Changed to make it flexible on larger screens */
+  max-width: 500px; /* Maximum width for larger screens */
+  align-items: center;
+  overflow-y: auto; /* Enable scrolling within the form if content is too large */
+  margin-top: 200px;
 }
 
 .matchday-grid {

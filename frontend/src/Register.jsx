@@ -19,7 +19,7 @@ function Register() {
     }
     try {
       await axios.post(
-        "http://localhost:5002/register",
+        "http://https://premier-league-predictor-1.onrender.com/register",
         {
             username,
             password,

@@ -12,7 +12,7 @@ const MatchdaySelector = () => {
 
   return (
     <div className="matchday-selector-container">
-      <h1>Select a Matchday</h1>
+      <h1 className="text">Select a Matchday</h1>
       <div className="matchday-grid">
         {Array.from({ length: 38 }, (_, i) => (
           <div

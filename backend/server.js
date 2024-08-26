@@ -6,6 +6,9 @@ import User from "./models/users.js";
 import { connectDB } from "./config/db.js";
 import path from "path";
 import cors from "cors";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+
 
 dotenv.config();
 
@@ -112,8 +115,11 @@ app.post("/register", async (req, res) => {
       return res.status(400).json({ error: "User already exists" });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+
     // Create and save new user
-    const newUser = new User({ username, password });
+    const newUser = new User({ username, password: hashedPassword });
     await newUser.save();
 
     res.json({ message: "User registered successfully" });
@@ -139,13 +145,45 @@ app.post("/login", async (req, res) => {
     }
 
     // Check if password is correct
-    if (password !== user.password) {
+    const isPasswordValid = await bcrypt.compare(password, user.password); // user.password is the hashed password from the DB
+    if (!isPasswordValid) {
       return res.status(400).json({ error: "Invalid password" });
     }
 
-    res.json({ message: "Login successful" });
+    // Generate a JWT token
+    const token = jwt.sign({ userId: user._id }, "your_secret_key", { expiresIn: "1h" }); // Replace 'your_secret_key' with an actual secret key
+      //console.log("Token:", token);
+
+    // Return the token to the client
+    res.json({ message: "Login successful", token });
   } catch (error) {
     console.error("Error logging in user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+const authenticateToken = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1]; // Bearer token
+  
+  if (!token) return res.sendStatus(401);
+
+  jwt.verify(token, "your_secret_key", (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user; // Attach decoded token data to req.user
+    next();
+  });
+};
+// Example protected route on the backend
+app.get("/me", authenticateToken, async (req, res) => {
+  try {
+    // req.user contains the decoded JWT payload (userId, username)
+    const user = await User.findById(req.user.userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    // Return user-specific information
+    res.json({ username: user.username});
+  } catch (error) {
+    console.error("Error fetching user data:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -164,5 +202,5 @@ app.get("*", (req, res) => {
 // Start the server and connect to the database
 app.listen(5002, () => {
   connectDB();
-  console.log("Server is running on http://localhost:5002");
+  console.log("Server is running on http://https://premier-league-predictor-1.onrender.com");
 });

@@ -190,8 +190,6 @@ const PredictionForm = () => {
 
   return (
     <div className="app-container">
-      <div className="left-side"></div>
-      <div className="right-side"></div>
       <div className="form-content" onSubmit={handleSubmit}>
         <h1 className="text">Premier League Prediction Form</h1>
         <form className="prediction-form">

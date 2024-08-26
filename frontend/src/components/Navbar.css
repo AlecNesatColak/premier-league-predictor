@@ -28,7 +28,7 @@
   font-size: 18px;
   font-weight: bold;
   padding: 10px 15px;
-  border-radius: 5px;
+  border-radius: 10px;
   transition: background-color 0.3s ease;
 }
 
@@ -45,4 +45,20 @@
   .navbar-links li {
     margin-bottom: 10px;
   }
+}
+
+
+.logout-btn {
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: red;
 }

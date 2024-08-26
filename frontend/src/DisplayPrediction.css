@@ -1,27 +1,21 @@
 
+/* Global Styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  height: 100%;
+  overflow-y: auto; /* Allow vertical scrolling */
+}
+
 /* Flexbox container for left and right backgrounds */
 .app-container {
   display: flex;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh; /* Use min-height to ensure it takes at least the full viewport height */
+  overflow: auto; /* Enable scrolling when content overflows */
 }
 
-.left-side,
-.right-side {
-  width: 50%;
-  background-position: center;
-}
-
-/* Zoom out the background image */
-.left-side {
-  background-image: url("https://resources.premierleague.com/photos/2024/08/18/28d0974e-3778-4c22-8c29-f253f9c92e51/2024-08-18T155323Z_372692886_UP1EK8I184Y5S_RTRMADP_3_SOCCER-ENGLAND-CHE-MCI-REPORT.JPG?width=1200&height=");
-  background-size: 177%;
-}
-
-.right-side {
-  background-image: url("https://resources.premierleague.com/photos/premierleague/photo/2024/08/17/f46b8810-487d-4917-b8f6-a5af59eb9568/2167141136.jpg?width=1200&height=");
-  background-size: 177%;
-}
 
 .form-background {
   color: rgba(0 0, 0, 0.6);
@@ -29,18 +23,22 @@
 
 /* Center the content in the middle of the page */
 .display-form-content {
-  position: fixed;
-  top: 55%;
+  position:absolute;
+  top: 50%;
   left: 50%;
+  margin: 70px auto; /* Add top margin of 70px to account for the navbar */
   transform: translate(-50%, -50%);
   z-index: 1;
   color: black;
   text-align: center;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 20px;
   background-color: rgba(0, 0, 0, 0.6);
-  width: 39%;
+  width: 90%; /* Changed to make it flexible on larger screens */
+  max-width: 500px; /* Maximum width for larger screens */
   align-items: center;
+  overflow-y: auto; /* Enable scrolling within the form if content is too large */
+  margin-top: 140px;
 }
 
 .draggable-item img {
@@ -116,6 +114,7 @@ input[type="text"] {
 /* Button styling */
 button {
   width: 100%;
+  margin-bottom: 10px;
   padding: 10px;
   background-color: #4caf50;
   color: white;
@@ -131,11 +130,6 @@ button:hover {
 
 /* Media query for mobile responsiveness */
 @media (max-width: 768px) {
-  .left-side,
-  .right-side {
-    width: 100%;
-    height: 50vh;
-  }
 
   .content {
     width: 90%;

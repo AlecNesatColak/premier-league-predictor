@@ -99,7 +99,7 @@ const Matchday = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:5002/api/matchweek?matchday=${matchdayNumber}`
+          `http://https://premier-league-predictor-1.onrender.com/api/matchweek?matchday=${matchdayNumber}`
         );
         const data = await response.json();
         setMatches(data.matches);
