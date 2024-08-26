@@ -199,8 +199,9 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/frontend/build", "index.html"));
 });
 
+const PORT = process.env.PORT
 // Start the server and connect to the database
-app.listen(5002, () => {
-  connectDB();
-  console.log("Server is running on http://https://premier-league-predictor-1.onrender.com");
+app.listen(PORT, () => {
+  connectDB(); // Make sure the database is connected before serving requests
+  console.log(`Server is running on port ${PORT}`);
 });
