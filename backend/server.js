@@ -14,6 +14,9 @@ dotenv.config();
 
 const app = express();
 
+// Middleware to parse JSON body
+app.use(express.json());
+
 app.use(
   cors({
     origin: "*", // Allow all origins
