@@ -14,9 +14,12 @@ dotenv.config();
 
 const app = express();
 
-// Middleware to parse JSON body
-app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "*", // Allow all origins
+    credentials: false, // Allow credentials (cookies, tokens, etc.)
+  })
+);
 
 // API routes
 app.post("/api/prediction", async (req, res) => {
@@ -151,7 +154,7 @@ app.post("/login", async (req, res) => {
     }
 
     // Generate a JWT token
-    const token = jwt.sign({ userId: user._id }, "your_secret_key", { expiresIn: "1h" }); // Replace 'your_secret_key' with an actual secret key
+    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: "1h" }); // Replace 'your_secret_key' with an actual secret key
       //console.log("Token:", token);
 
     // Return the token to the client
