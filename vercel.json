@@ -15,11 +15,11 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)", // Route API calls to the backend
+      "src": "/api/(.*)",
       "dest": "/backend/server.js"
     },
     {
-      "src": "/(.*)", // Redirect all other routes to index.html (React Router will handle them)
+      "src": "/(.*)",
       "dest": "/frontend/dist/index.html"
     }
   ]
