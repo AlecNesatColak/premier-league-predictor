@@ -17,10 +17,14 @@ const app = express();
 // Middleware to parse JSON body
 app.use(express.json());
 
-const allowedOrigins = ['http://localhost:5173']; // Frontend URL
+const allowedOrigins = [
+  'http://localhost:5173', // Local development URL
+  'https://premier-league-predictor.vercel.app', // Vercel deployed frontend URL
+];
+
 app.use(cors({
   origin: allowedOrigins,
-  credentials: true
+  credentials: true, // Allow credentials such as cookies, authorization headers
 }));
 
 // API routes
