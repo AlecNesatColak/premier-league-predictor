@@ -17,7 +17,7 @@ function Login() {
     }
     try {
       // Send login request to the backend
-      const response = await axios.post("http://https://premier-league-predictor-1.onrender.com/login", {
+      const response = await axios.post("https://premier-league-predictor-1.onrender.com/login", {
         username,
         password,
       });

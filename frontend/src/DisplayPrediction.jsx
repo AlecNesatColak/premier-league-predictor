@@ -23,7 +23,7 @@ const DisplayPrediction = () => {
   const fetchActualPositions = async () => {
     try {
       const response = await axios.get(
-        `http://https://premier-league-predictor-1.onrender.com/api/standings`
+        `https://premier-league-predictor-1.onrender.com/api/standings`
       );
       const standings = response.data.standings[0].table;
 
@@ -77,7 +77,7 @@ const DisplayPrediction = () => {
     const fetchPrediction = async () => {
       try {
         const response = await axios.get(
-          `http://https://premier-league-predictor-1.onrender.com/api/prediction/${user}`
+          `https://premier-league-predictor-1.onrender.com/api/prediction/${user}`
         );
         setPrediction(response.data.data); // Store the user's prediction
       } catch (err) {

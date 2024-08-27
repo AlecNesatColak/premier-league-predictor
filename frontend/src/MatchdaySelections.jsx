@@ -13,7 +13,7 @@ const MatchdaySelections = () => {
     const fetchMatches = async () => {
       try {
         const response = await fetch(
-          `http://https://premier-league-predictor-1.onrender.com/api/matchweek?matchday=${matchdayNumber}`
+          `https://premier-league-predictor-1.onrender.com/api/matchweek?matchday=${matchdayNumber}`
         );
         const data = await response.json();
         setMatches(data.matches);
@@ -26,7 +26,7 @@ const MatchdaySelections = () => {
     const fetchUserPredictions = async () => {
       try {
         const response = await fetch(
-          `http://https://premier-league-predictor-1.onrender.com/api/user-predictions?user=${user}&matchday=${matchdayNumber}`
+          `https://premier-league-predictor-1.onrender.com/api/user-predictions?user=${user}&matchday=${matchdayNumber}`
         );
         const data = await response.json();
         setUserPredictions(data.predictions);
