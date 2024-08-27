@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": "2",
   "builds": [
     {
       "src": "frontend/package.json",
@@ -13,12 +13,6 @@
       "use": "@vercel/node"
     }
   ],
-  "routes": [
-    {
-      "src": "/api/(.*)", 
-      "dest": "/backend/server.js" 
-    }
-  ],
   "rewrites": [
     {
       "source": "/(.*)",
@@ -26,4 +20,3 @@
     }
   ]
 }
-
