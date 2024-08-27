@@ -23,7 +23,7 @@ const DisplayPrediction = () => {
   const fetchActualPositions = async () => {
     try {
       const response = await axios.get(
-        `https://premier-league-predictor-1.onrender.com/api/standings`
+        `http://https://premier-league-predictor-1.onrender.com/api/standings`
       );
       const standings = response.data.standings[0].table;
 
@@ -77,7 +77,7 @@ const DisplayPrediction = () => {
     const fetchPrediction = async () => {
       try {
         const response = await axios.get(
-          `https://premier-league-predictor-1.onrender.com/api/prediction/${user}`
+          `http://https://premier-league-predictor-1.onrender.com/api/prediction/${user}`
         );
         setPrediction(response.data.data); // Store the user's prediction
       } catch (err) {
@@ -122,8 +122,9 @@ const DisplayPrediction = () => {
                 const actualPosition = getActualPosition(team.name); // Get the actual position of the team
                 return (
                   <div key={index} className="draggable-item">
+                    <span className="predicted-position">{index + 1}</span>
                     <img src={team.logo} alt={`${team.name} logo`} width="40" />
-                    <span>{team.name}</span>
+                    <span className="team-name">{team.name}</span>
                     <span className="actual-position">
                       {actualPosition}
                     </span>{" "}
@@ -138,8 +139,9 @@ const DisplayPrediction = () => {
                 const actualPosition = getActualPosition(team.name); // Get the actual position of the team
                 return (
                   <div key={index} className="draggable-item">
+                    <span className="predicted-position">{index + 11}</span>
                     <img src={team.logo} alt={`${team.name} logo`} width="40" />
-                    <span>{team.name}</span>
+                    <span className="team-name">{team.name === 'Wolverhampton Wanderers' ? 'Wolves' : team.name}</span>
                     <span className="actual-position">
                       {actualPosition}
                     </span>{" "}

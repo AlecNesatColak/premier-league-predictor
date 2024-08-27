@@ -1,22 +1,20 @@
-const jwt = require("jsonwebtoken");
-
 const authenticateToken = (req, res, next) => {
-  const token = req.headers['authorization'];
-
+  const token = req.headers['authorization']?.split(' ')[1]; // Bearer token
+  
   if (!token) {
-    return res.status(401).json({ error: "Access denied" });
+    console.log('No token provided');
+    return res.sendStatus(401);
   }
 
-  try {
-    const verified = jwt.verify(token.split(' ')[1], "your_secret_key");  // 'your_secret_key' should be your secret key
-    req.user = verified;
-    next();  // Pass to the next middleware/route
-  } catch (error) {
-    return res.status(403).json({ error: "Invalid token" });
-  }
+  console.log('Token received:', token); // Log the token
+
+  jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+    if (err) {
+      console.error('Token verification failed:', err); // Log verification error
+      return res.sendStatus(403); // Invalid token, Forbidden
+    }
+    req.user = user; // Attach decoded token data to req.user
+    next();
+  });
 };
 
-// Example of a protected route
-app.get("/protected", authenticateToken, (req, res) => {
-  res.json({ message: "This is a protected route!" });
-});

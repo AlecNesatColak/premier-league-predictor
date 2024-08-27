@@ -7,35 +7,39 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
-  
-  // Check if the user is logged in by checking if a token exists in localStorage
+  const [isOpen, setIsOpen] = useState(false); // New state for hamburger menu
+
+  // Toggle the hamburger menu
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   const isAuthenticated = !!localStorage.getItem("authToken");
 
   const handleLogout = () => {
-    // Remove the auth token from localStorage when logging out
     localStorage.removeItem("authToken");
-    setUserData(null); // Clear the user data after logout
+    setUserData(null);
     alert("You have been logged out.");
     navigate("/login");
   };
 
   useEffect(() => {
-    // Fetch user data if authenticated
     const fetchUserData = async () => {
-      if (isAuthenticated) {
-        try {
-          const token = localStorage.getItem("authToken");
-          const response = await axios.get("https://premier-league-predictor-1.onrender.com/me", {
-            headers: {
-              Authorization: `Bearer ${token}`, // Send the token as a Bearer token
-            },
-          });
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("No token found in localStorage");
+      }
 
-          setUserData(response.data); // Store the user data (e.g., username)
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-          setError("Failed to fetch user data");
-        }
+      try {
+        const response = await axios.get("http://https://premier-league-predictor-1.onrender.com/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("User data:", response.data);
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
     };
 
@@ -44,43 +48,33 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <ul className="navbar-links">
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/prediction-form">Prediction Form</Link>
-        </li>
+      <div className="navbar-container">
+        {/* Hamburger icon for mobile */}
+        <div className="hamburger" onClick={toggleMenu}>
+          <div className={`bar ${isOpen ? 'open' : ''}`}></div>
+          <div className={`bar ${isOpen ? 'open' : ''}`}></div>
+          <div className={`bar ${isOpen ? 'open' : ''}`}></div>
+        </div>
 
-        {/* Display Prediction link based on whether user data is available */}
-        {userData && (
-          <li>
-            <Link to={`/prediction/${userData.username}`}>Display Prediction</Link>
-          </li>
-        )}
+        {/* Navbar links */}
+        <ul className={`navbar-links ${isOpen ? 'active' : ''}`}>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/prediction-form">Prediction Form</Link></li>
+          {userData && <li><Link to={`/prediction/${userData.username}`}>Display Prediction</Link></li>}
+          <li><Link to="/matchday-selector">MatchWeeks</Link></li>
 
-        <li>
-          <Link to="/matchday-selector">MatchWeeks</Link>
-        </li>
-
-        {/* Conditionally render based on whether the user is authenticated */}
-        {isAuthenticated ? (
-          <>
+          {isAuthenticated ? (
             <li>
               <button onClick={handleLogout} className="logout-btn">Logout</button>
             </li>
-          </>
-        ) : (
-          <>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
-          </>
-        )}
-      </ul>
+          ) : (
+            <>
+              <li><Link to="/login">Login</Link></li>
+              <li><Link to="/register">Register</Link></li>
+            </>
+          )}
+        </ul>
+      </div>
     </nav>
   );
 };

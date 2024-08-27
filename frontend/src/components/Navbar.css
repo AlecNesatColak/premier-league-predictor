@@ -1,12 +1,22 @@
-/* Transparent Navbar */
+/* Navbar styling */
 .navbar {
-  position: fixed; /* Stick to the top of the page */
+  position: fixed;
   top: 0;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* Transparent background */
   padding: 10px 0;
   z-index: 1000; /* Ensure the navbar stays on top of other content */
-  text-align: center;
+  display: flex;
+  justify-content: center; /* Center the navbar container */
+  align-items: center; /* Vertically align items */
+}
+
+/* Navbar container */
+.navbar-container {
+  display: flex;
+  justify-content: space-around; /* Evenly distribute items */
+  width: 100%;
+  padding: 0 20px;
 }
 
 /* Styling the Navbar Links */
@@ -14,8 +24,10 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center; /* Center the links */
+  display: flex; /* Display navbar links in a row */
+  justify-content: space-around; /* Spread the links across the navbar */
+  align-items: center; /* Vertically align links */
+  flex-grow: 1; /* Make the navbar links take up available space */
 }
 
 .navbar-links li {
@@ -33,21 +45,10 @@
 }
 
 .navbar-links a:hover {
-  background-color: rgba(255, 255, 255, 0.2); /* Hover effect with slight background color change */
+  background-color: rgba(255, 255, 255, 0.2); /* Hover effect */
 }
 
-/* Responsive: Stack the links vertically on smaller screens */
-@media (max-width: 768px) {
-  .navbar-links {
-    flex-direction: column;
-  }
-
-  .navbar-links li {
-    margin-bottom: 10px;
-  }
-}
-
-
+/* Logout button styling */
 .logout-btn {
   color: white;
   padding: 10px 15px;
@@ -61,4 +62,64 @@
 
 .logout-btn:hover {
   background-color: red;
+}
+
+/* Mobile (hamburger) navbar */
+.hamburger {
+  display: none; /* Hidden by default */
+  cursor: pointer;
+}
+
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  margin: 4px;
+  transition: 0.3s;
+}
+
+.bar.open {
+  background-color: red;
+}
+
+/* Responsive: Stack the links vertically on smaller screens */
+@media (max-width: 768px) {
+  .navbar{
+    padding: 25px 0;
+  }
+  .navbar-links {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 50px;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    width: 200px;
+    height: 100%;
+    justify-content: flex-start;
+    padding-top: 20px;
+    align-items: flex-start;
+    z-index: 1000;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .navbar-links li {
+    margin-bottom: 10px;
+  }
+
+  .hamburger {
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 1100;
+  }
+
+  .navbar-links a {
+    font-size: 24px;
+    padding: 15px;
+  }
 }

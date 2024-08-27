@@ -17,12 +17,11 @@ const app = express();
 // Middleware to parse JSON body
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: "*", // Allow all origins
-    credentials: false, // Allow credentials (cookies, tokens, etc.)
-  })
-);
+const allowedOrigins = ['http://localhost:5173']; // Frontend URL
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 
 // API routes
 app.post("/api/prediction", async (req, res) => {
@@ -171,14 +170,23 @@ app.post("/login", async (req, res) => {
 const authenticateToken = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1]; // Bearer token
   
-  if (!token) return res.sendStatus(401);
+  if (!token) {
+    console.log('No token provided');
+    return res.sendStatus(401);
+  }
 
-  jwt.verify(token, "your_secret_key", (err, user) => {
-    if (err) return res.sendStatus(403);
+  console.log('Token received:', token); // Log the token
+
+  jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+    if (err) {
+      console.error('Token verification failed:', err); // Log verification error
+      return res.sendStatus(403); // Invalid token, Forbidden
+    }
     req.user = user; // Attach decoded token data to req.user
     next();
   });
 };
+
 // Example protected route on the backend
 app.get("/me", authenticateToken, async (req, res) => {
   try {

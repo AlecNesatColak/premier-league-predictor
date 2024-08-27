@@ -34,15 +34,20 @@ html, body {
   padding: 20px;
   border-radius: 20px;
   background-color: rgba(0, 0, 0, 0.6);
-  width: 90%; /* Changed to make it flexible on larger screens */
+  width: 100%; /* Changed to make it flexible on larger screens */
   max-width: 500px; /* Maximum width for larger screens */
   align-items: center;
   overflow-y: auto; /* Enable scrolling within the form if content is too large */
-  margin-top: 140px;
+  margin-top: 120px;
 }
 
 .draggable-item img {
   margin-right: 10px;
+  align-items: left;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+
 }
 
 .draggable-item span {
@@ -64,7 +69,7 @@ html, body {
 
 /* Styling for each column */
 .team-column {
-  width: 40%; /* Reduced width to make the columns smaller */
+  width: 47%; /* Reduced width to make the columns smaller */
 }
 
 .draggable-item {
@@ -79,9 +84,15 @@ html, body {
   cursor: grab;
 }
 
-.draggable-item img {
-  margin-right: 10px;
-  width: 30px; /* Reduced image size */
+
+.predicted-position{
+  text-align: left;
+  flex-grow: 0 !important;
+}
+
+.team-name{
+  flex-grow: 1;
+  text-align: left;
 }
 
 

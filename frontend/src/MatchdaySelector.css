@@ -2,7 +2,7 @@
   position:absolute;
   top: 50%;
   left: 50%;
-  margin: 70px auto; /* Add top margin of 70px to account for the navbar */
+  margin: 10px auto; /* Add top margin of 70px to account for the navbar */
   transform: translate(-50%, -50%);
   z-index: 1;
   color: black;
@@ -11,10 +11,10 @@
   border-radius: 20px;
   background-color: rgba(0, 0, 0, 0.6);
   width: 90%; /* Changed to make it flexible on larger screens */
-  max-width: 500px; /* Maximum width for larger screens */
+  max-width: 900px; /* Maximum width for larger screens */
   align-items: center;
   overflow-y: auto; /* Enable scrolling within the form if content is too large */
-  margin-top: 200px;
+  margin-top: 50px;
 }
 
 .matchday-grid {
@@ -39,3 +39,14 @@
   background-color: #d1e7dd;
 }
 
+.go-home-button {
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
