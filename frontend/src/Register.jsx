@@ -4,7 +4,6 @@ import "./Register.css";
 import Navbar from "./components/Navbar";
 import axios from "axios";
 
-
 function Register() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -18,18 +17,17 @@ function Register() {
       return;
     }
     try {
-      await axios.post(
-        "https://premier-league-predictor-1.onrender.com/register",
-        {
-            username,
-            password,
-        }
-      );
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL_PROD}/register`, {
+        username,
+        password,
+      });
       alert("Registration successful!");
       navigate("/login");
     } catch (error) {
       console.error("Error registering user:", error);
-      alert("There was an issue submitting your registration. Please try again.");
+      alert(
+        "There was an issue submitting your registration. Please try again."
+      );
     }
   };
 
@@ -37,7 +35,9 @@ function Register() {
     <div className="home-app-container">
       <Navbar />
       <div className="home-content">
-        <h1 className="text">Welcome to the Premier League Predictor Registration</h1>
+        <h1 className="text">
+          Welcome to the Premier League Predictor Registration
+        </h1>
         <div>
           <div>
             <label htmlFor="username" className="text">

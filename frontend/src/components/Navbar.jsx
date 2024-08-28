@@ -31,11 +31,14 @@ const Navbar = () => {
       }
 
       try {
-        const response = await axios.get("https://premier-league-predictor-1.onrender.com/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL_PROD}/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         console.log("User data:", response.data);
         setUserData(response.data);
       } catch (error) {
@@ -51,26 +54,44 @@ const Navbar = () => {
       <div className="navbar-container">
         {/* Hamburger icon for mobile */}
         <div className="hamburger" onClick={toggleMenu}>
-          <div className={`bar ${isOpen ? 'open' : ''}`}></div>
-          <div className={`bar ${isOpen ? 'open' : ''}`}></div>
-          <div className={`bar ${isOpen ? 'open' : ''}`}></div>
+          <div className={`bar ${isOpen ? "open" : ""}`}></div>
+          <div className={`bar ${isOpen ? "open" : ""}`}></div>
+          <div className={`bar ${isOpen ? "open" : ""}`}></div>
         </div>
 
         {/* Navbar links */}
-        <ul className={`navbar-links ${isOpen ? 'active' : ''}`}>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/prediction-form">Prediction Form</Link></li>
-          {userData && <li><Link to={`/prediction/${userData.username}`}>Display Prediction</Link></li>}
-          <li><Link to="/matchday-selector">MatchWeeks</Link></li>
+        <ul className={`navbar-links ${isOpen ? "active" : ""}`}>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/prediction-form">Prediction Form</Link>
+          </li>
+          {userData && (
+            <li>
+              <Link to={`/prediction/${userData.username}`}>
+                Display Prediction
+              </Link>
+            </li>
+          )}
+          <li>
+            <Link to="/matchday-selector">MatchWeeks</Link>
+          </li>
 
           {isAuthenticated ? (
             <li>
-              <button onClick={handleLogout} className="logout-btn">Logout</button>
+              <button onClick={handleLogout} className="logout-btn">
+                Logout
+              </button>
             </li>
           ) : (
             <>
-              <li><Link to="/login">Login</Link></li>
-              <li><Link to="/register">Register</Link></li>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+              <li>
+                <Link to="/register">Register</Link>
+              </li>
             </>
           )}
         </ul>

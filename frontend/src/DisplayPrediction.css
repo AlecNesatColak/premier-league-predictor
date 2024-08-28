@@ -1,4 +1,3 @@
-
 /* Global Styles */
 html, body {
   margin: 0;
@@ -7,26 +6,29 @@ html, body {
   font-family: Arial, sans-serif;
   height: 100%;
   overflow-y: auto; /* Allow vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 /* Flexbox container for left and right backgrounds */
 .app-container {
   display: flex;
-  min-height: 100vh; /* Use min-height to ensure it takes at least the full viewport height */
+  min-height: 100vh; /* Ensure it takes at least the full viewport height */
   overflow: auto; /* Enable scrolling when content overflows */
+  width: 100vw; /* Ensure it takes up the full viewport width */
+  position: relative;
 }
 
-
 .form-background {
-  color: rgba(0 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.9);
+  max-width: 700px;
+  width: 100%;
 }
 
 /* Center the content in the middle of the page */
 .display-form-content {
-  position:absolute;
+  position: absolute;
   top: 50%;
   left: 50%;
-  margin: 70px auto; /* Add top margin of 70px to account for the navbar */
   transform: translate(-50%, -50%);
   z-index: 1;
   color: black;
@@ -34,11 +36,25 @@ html, body {
   padding: 20px;
   border-radius: 20px;
   background-color: rgba(0, 0, 0, 0.6);
-  width: 100%; /* Changed to make it flexible on larger screens */
-  max-width: 500px; /* Maximum width for larger screens */
+  width: 90vw; /* Use vw to ensure form doesn't overflow horizontally */
+  max-width: 900px; /* Maximum width for larger screens */
   align-items: center;
   overflow-y: auto; /* Enable scrolling within the form if content is too large */
-  margin-top: 120px;
+  margin-top: 200px;
+}
+
+/* Styling for the draggable items in the prediction display */
+.draggable-item {
+  padding: 10px; /* Reduced padding for a smaller item size */
+  margin-bottom: 8px;
+  background-color: white;
+  border-radius: 5px;
+  border: 2px solid #4caf50;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: grab;
 }
 
 .draggable-item img {
@@ -47,7 +63,6 @@ html, body {
   justify-content: center;
   width: 30px;
   height: 30px;
-
 }
 
 .draggable-item span {
@@ -58,6 +73,7 @@ html, body {
   font-weight: bold;
   color: #ff5733;
   text-align: right;
+  margin-left: auto; /* Ensure it aligns to the right */
 }
 
 /* Container for the two columns */
@@ -65,6 +81,7 @@ html, body {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  box-sizing: border-box;
 }
 
 /* Styling for each column */
@@ -72,29 +89,19 @@ html, body {
   width: 47%; /* Reduced width to make the columns smaller */
 }
 
-.draggable-item {
-  padding: 10px; /* Reduced padding for a smaller item size */
-  margin-bottom: 8px;
-  background-color: white;
-  border-radius: 5px;
-  border: 2px solid #4caf50; /* Added border for each item */
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  cursor: grab;
-}
-
-
-.predicted-position{
+.predicted-position {
   text-align: left;
   flex-grow: 0 !important;
 }
 
-.team-name{
+.team-name {
   flex-grow: 1;
   text-align: left;
 }
 
+.arrow-down {
+  color: red; /* Red for worse performance */
+}
 
 /* Styling for the form */
 form {
@@ -114,9 +121,9 @@ form {
 
 /* Input field styles */
 input[type="text"] {
-  width: 90%;
+  width: 100%; /* Make input field take full width */
   padding: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 16px;
@@ -139,9 +146,62 @@ button:hover {
   background-color: #45a049;
 }
 
+/* General styles for the stats table */
+.stats-table {
+  width: 500px;
+  border-collapse: collapse;
+  margin-left: 1800px; /* Creates space between the form and the stats table */
+  margin-top: 240px;
+  font-size: 0.9em;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  float: right; /* Floats the table to the right of the form */
+  height: 300px;
+}
+
+.stats-table th, .stats-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.stats-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.stats-table td {
+  background-color: #fff;
+}
+
+.stats-table tr:nth-child(even) td {
+  background-color: #f9f9f9;
+}
+
+/* Container styling to ensure the display form and the table are aligned properly */
+.prediction-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+  .prediction-container {
+    flex-direction: column;
+  }
+
+  .stats-table {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 20px;
+    float: none;
+  }
+}
+
+
 /* Media query for mobile responsiveness */
 @media (max-width: 768px) {
-
   .content {
     width: 90%;
   }

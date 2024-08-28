@@ -6,6 +6,7 @@ html, body {
   font-family: Arial, sans-serif;
   height: 100%;
   overflow-y: auto; /* Allow vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 /* Flexbox container for left and right backgrounds */
@@ -13,56 +14,21 @@ html, body {
   display: flex;
   min-height: 100vh; /* Use min-height to ensure it takes at least the full viewport height */
   overflow: auto; /* Enable scrolling when content overflows */
+  width: 100vw; /* Ensure it takes up the full viewport width */
+  position: relative; /* To control the position of the form within the background */
 }
 
-
-
 .form-background {
-  color: rgba(0 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.5);
+  max-width: 800px;
+  width: 100%; /* Ensure it doesn't overflow */
 }
 
 /* Center the content in the middle of the page */
-
-
-.prediction-form {
-  position: relative;
-  left: -3%;
-}
-
-/* Container for the two columns */
-.table-container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-/* Styling for each column */
-.team-column {
-  width: 50%;
-}
-
-.draggable-item {
-  padding: 16px;
-  margin-bottom: 8px;
-  background-color: white;
-  border-radius: 5px;
-  border: 2px solid #4caf50; /* Added border for each item */
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  cursor: grab;
-}
-
-.draggable-item img {
-  margin-right: 10px;
-}
-/* Styling for the form */
-
 .form-content {
-  position:absolute;
+  position: absolute;
   top: 50%;
   left: 50%;
-  margin: 70px auto; /* Add top margin of 70px to account for the navbar */
   transform: translate(-50%, -50%);
   z-index: 1;
   color: black;
@@ -70,30 +36,33 @@ html, body {
   padding: 20px;
   border-radius: 20px;
   background-color: rgba(0, 0, 0, 0.6);
-  width: 90%; /* Changed to make it flexible on larger screens */
-  max-width: 500px; /* Maximum width for larger screens */
+  width: 90vw; /* Use vw to ensure form doesn't overflow horizontally */
+  max-width: 700px; /* Maximum width for larger screens */
   align-items: center;
+  box-sizing: border-box; /* Ensure padding is included within the width */
   overflow-y: auto; /* Enable scrolling within the form if content is too large */
-  margin-top: 200px;
 }
 
+/* Styling for the form */
 form {
-  background-color: rgba(0, 0, 0, 0.9);
-  width: 100%; /* Make the form responsive inside the container */
-  padding: 15px; /* Reduce padding to make the form more compact */
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  padding: 15px;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box; /* Include padding in width to prevent overflow */
 }
 
+/* Input field styles */
 input[type="text"] {
-  width: 100%; /* Make input field take full width */
+  width: 100%;
   padding: 10px;
-  margin-bottom: 15px; /* Adjust margin to make input more compact */
+  margin-bottom: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 16px;
+  box-sizing: border-box;
 }
-
 
 /* Button styling */
 button {
@@ -111,13 +80,42 @@ button:hover {
   background-color: #45a049;
 }
 
+/* Container for the two columns */
+.table-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Styling for each column */
+.team-column {
+  width: 47%; /* Reduced width to make the columns smaller */
+}
+
+.draggable-item {
+  padding: 16px;
+  margin-bottom: 8px;
+  background-color: white;
+  border-radius: 5px;
+  border: 2px solid #4caf50; /* Added border for each item */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  cursor: grab;
+}
+
+.draggable-item img {
+  margin-right: 10px;
+}
+
 /* Media query for mobile responsiveness */
 @media (max-width: 768px) {
   .left-side,
   .right-side {
     width: 100%;
     height: 50vh;
-    background-size: cover; /* Ensure backgrounds cover on mobile as well */
+    background-size: cover;
   }
 
   .content {

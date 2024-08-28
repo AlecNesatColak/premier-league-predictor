@@ -13,7 +13,9 @@ const MatchdaySelections = () => {
     const fetchMatches = async () => {
       try {
         const response = await fetch(
-          `https://premier-league-predictor-1.onrender.com/api/matchweek?matchday=${matchdayNumber}`
+          `${
+            import.meta.env.VITE_BACKEND_URL_PROD
+          }/api/matchweek?matchday=${matchdayNumber}`
         );
         const data = await response.json();
         setMatches(data.matches);
@@ -26,7 +28,9 @@ const MatchdaySelections = () => {
     const fetchUserPredictions = async () => {
       try {
         const response = await fetch(
-          `https://premier-league-predictor-1.onrender.com/api/user-predictions?user=${user}&matchday=${matchdayNumber}`
+          `${
+            import.meta.env.VITE_BACKEND_URL_PROD
+          }/api/user-predictions?user=${user}&matchday=${matchdayNumber}`
         );
         const data = await response.json();
         setUserPredictions(data.predictions);
@@ -75,7 +79,9 @@ const MatchdaySelections = () => {
 
       {showPredictions && (
         <div className="user-predictions">
-          <h2>{user}'s Predictions for Matchweek {matchdayNumber}</h2>
+          <h2>
+            {user}'s Predictions for Matchweek {matchdayNumber}
+          </h2>
           {userPredictions.length > 0 ? (
             <table>
               <thead>
@@ -104,9 +110,7 @@ const MatchdaySelections = () => {
       )}
 
       {!showPredictions && (
-        <button onClick={handleShowPredictions}>
-          Show Your Selections
-        </button>
+        <button onClick={handleShowPredictions}>Show Your Selections</button>
       )}
     </div>
   );

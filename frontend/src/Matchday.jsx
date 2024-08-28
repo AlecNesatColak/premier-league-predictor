@@ -4,22 +4,20 @@ import "./Matchday.css"; // Import your CSS file
 
 // Component to display a table of matches
 const Matchweek = ({ matches }) => {
-
-const convertToEST = (utcDate) => {
-  const date = new Date(utcDate); // Convert the string to a Date object
-  return date.toLocaleString("en-US", {
-    timeZone: "America/New_York", // Timezone for EST/EDT
-    weekday: "short", // Short weekday format, e.g., "Sun"
-    year: "numeric",
-    month: "short", // Short month format, e.g., "Aug"
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hour12: true, // Display in 12-hour format (AM/PM)
-  });
-};
-
+  const convertToEST = (utcDate) => {
+    const date = new Date(utcDate); // Convert the string to a Date object
+    return date.toLocaleString("en-US", {
+      timeZone: "America/New_York", // Timezone for EST/EDT
+      weekday: "short", // Short weekday format, e.g., "Sun"
+      year: "numeric",
+      month: "short", // Short month format, e.g., "Aug"
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true, // Display in 12-hour format (AM/PM)
+    });
+  };
 
   return (
     <div className="matchweek-container">
@@ -47,7 +45,9 @@ const convertToEST = (utcDate) => {
                 {match.score.fullTime.home} - {match.score.fullTime.away}
               </td>
               <td>
-                {match.status === "FINISHED" || match.status === "LIVE" ? match.status : convertToEST(match.utcDate)} 
+                {match.status === "FINISHED" || match.status === "LIVE"
+                  ? match.status
+                  : convertToEST(match.utcDate)}
               </td>
             </tr>
           ))}
@@ -99,7 +99,9 @@ const Matchday = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `https://premier-league-predictor-1.onrender.com/api/matchweek?matchday=${matchdayNumber}`
+          `${
+            import.meta.env.VITE_BACKEND_URL_PROD
+          }/api/matchweek?matchday=${matchdayNumber}`
         );
         const data = await response.json();
         setMatches(data.matches);
@@ -127,7 +129,6 @@ const Matchday = () => {
     navigate(`/matchday/${matchdayNumber}/${user}`); // Navigate to matchday predictions page
   };
 
-
   return (
     <div className="App">
       <h1 className="matchday-h1">Premier League Matchday {matchdayNumber}</h1>
@@ -142,8 +143,12 @@ const Matchday = () => {
         <p>No matches found for matchday {matchdayNumber}</p>
       )}
       <div className="button-container">
-        <button className="matchday-button" onClick={handleNextMatchday}>Next Matchday</button>
-        <button className="matchday-button" onClick={handleShowPredictions}>Show Your Selections</button>
+        <button className="matchday-button" onClick={handleNextMatchday}>
+          Next Matchday
+        </button>
+        <button className="matchday-button" onClick={handleShowPredictions}>
+          Show Your Selections
+        </button>
       </div>
     </div>
   );

@@ -144,7 +144,7 @@ const PredictionForm = () => {
 
     try {
       await axios.post(
-        "https://premier-league-predictor-1.onrender.com/api/prediction",
+        `${import.meta.env.VITE_BACKEND_URL_PROD}/api/prediction`,
         {
           user,
           teams,

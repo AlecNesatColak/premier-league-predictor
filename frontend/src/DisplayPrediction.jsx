@@ -5,81 +5,62 @@ import "./DisplayPrediction.css";
 
 const DisplayPrediction = () => {
   const navigate = useNavigate();
-  const { user } = useParams(); // Get the user's name from the URL params
-  const [prediction, setPrediction] = useState(null); // Store the user's prediction
-  const [teamPositionMap, setTeamPositionMap] = useState({}); // Store team positions map
-  const [positionsFetched, setPositionsFetched] = useState(false); // Check if positions are fetched
+  const { user } = useParams();
+  const [prediction, setPrediction] = useState(null);
+  const [teamPositionMap, setTeamPositionMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const normalizeTeamName = (name) => {
     return name
       .toLowerCase()
-      .replace(/fc|afc|[\W_]+/g, "") // Remove 'fc', 'afc', and non-alphanumeric characters
-      .trim(); // Trim any leading/trailing spaces
+      .replace(/fc|afc|[\W_]+/g, "")
+      .trim();
   };
 
-  // Fetch actual standings from Football Data API once and store in a local map
   const fetchActualPositions = async () => {
     try {
       const response = await axios.get(
-        `https://premier-league-predictor-1.onrender.com/api/standings`
+        `${import.meta.env.VITE_BACKEND_URL_PROD}/api/standings`
       );
       const standings = response.data.standings[0].table;
 
       const positionMap = {};
-      let currentPosition = 1; // Start with the first position
-      let previousPosition = null; // To track the previous position for comparison
+      let currentPosition = 1;
 
-      standings.forEach((standing, index) => {
-        // Check if the previous team's position is the same as the current one
-        if (previousPosition === standing.position) {
-          currentPosition += 1; // Increment the position if the current one is tied
-        } else {
-          currentPosition = standing.position; // Assign the correct position if not tied
-        }
-
-        positionMap[standing.team.name] = currentPosition; // Map the team name to the adjusted position
-        previousPosition = standing.position; // Update previousPosition to the current one
-
+      standings.forEach((standing) => {
+        positionMap[standing.team.name] = currentPosition;
+        currentPosition = standing.position;
       });
 
-      setTeamPositionMap(positionMap); // Store the position map with updated positions
-      setPositionsFetched(true); // Indicate positions are fetched
+      setTeamPositionMap(positionMap);
     } catch (error) {
-      console.error("Error fetching data:", error); // Log the full error
+      console.error("Error fetching data:", error);
       setError("Error fetching data from Football Data API.");
     }
   };
 
-  // Function to get the actual position of the team from the local data structure
   const getActualPosition = (teamName) => {
     const normalizedPredictionName = normalizeTeamName(teamName);
 
-    // Loop over the teamPositionMap entries
     for (const [apiTeamName, position] of Object.entries(teamPositionMap)) {
       const normalizedApiTeamName = normalizeTeamName(apiTeamName);
 
-      // Log the normalized API team name and try to match
       if (normalizedApiTeamName.includes(normalizedPredictionName)) {
-        //console.log(
-          //`Matched: ${normalizedPredictionName} with ${normalizedApiTeamName}`
-        //);
-        return position; // Return the found position
+        return position;
       }
     }
 
-    return "Not found: N/A"; // Return "N/A" if not found
+    return "N/A";
   };
 
-  // Fetch the user's prediction from the backend
   useEffect(() => {
     const fetchPrediction = async () => {
       try {
         const response = await axios.get(
-          `https://premier-league-predictor-1.onrender.com/api/prediction/${user}`
+          `${import.meta.env.VITE_BACKEND_URL_PROD}/api/prediction/${user}`
         );
-        setPrediction(response.data.data); // Store the user's prediction
+        setPrediction(response.data.data);
       } catch (err) {
         setError("Error fetching prediction.");
       } finally {
@@ -88,11 +69,61 @@ const DisplayPrediction = () => {
     };
 
     fetchPrediction();
-    fetchActualPositions(); // Call to fetch positions
+    fetchActualPositions();
   }, [user]);
+
+  const getArrow = (predicted, actual) => {
+    if (predicted < actual) {
+      return <span style={{ color: "green" }}>⬆️</span>; // Green for better performance
+    } else if (predicted > actual) {
+      return <span style={{ color: "red" }}>🔻</span>;
+    } else {
+      return <span style={{ color: "green" }}>✅</span>; // Green check for correct prediction
+    }
+  };
+
+  const calculatePredictionStats = () => {
+    let correctCount = 0;
+    let oneOffCount = 0;
+    let twoOffCount = 0;
+    let furthestDiff = 0;
+    let furthestTeam = "";
+
+    prediction.teams.forEach((team, index) => {
+      const actualPosition = getActualPosition(team.name);
+      const predictedPosition = index + 1;
+      const diff =
+        actualPosition !== "N/A"
+          ? Math.abs(predictedPosition - actualPosition)
+          : null;
+
+      if (diff === 0) {
+        correctCount++;
+      } else if (diff === 1) {
+        oneOffCount++;
+      } else if (diff === 2) {
+        twoOffCount++;
+      }
+
+      if (diff !== null && diff > furthestDiff) {
+        furthestDiff = diff;
+        furthestTeam = team.name;
+      }
+    });
+
+    return {
+      correctCount,
+      oneOffCount,
+      twoOffCount,
+      furthestTeam,
+      furthestDiff,
+    };
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
+
+  const stats = calculatePredictionStats();
 
   return (
     <div className="app-container">
@@ -116,43 +147,86 @@ const DisplayPrediction = () => {
           </button>
         </div>
         {prediction && (
-          <div className="table-container">
-            <div className="team-column">
-              {prediction.teams.slice(0, 10).map((team, index) => {
-                const actualPosition = getActualPosition(team.name); // Get the actual position of the team
-                return (
-                  <div key={index} className="draggable-item">
-                    <span className="predicted-position">{index + 1}</span>
-                    <img src={team.logo} alt={`${team.name} logo`} width="40" />
-                    <span className="team-name">{team.name}</span>
-                    <span className="actual-position">
-                      {actualPosition}
-                    </span>{" "}
-                    {/* Actual position on the right */}
-                  </div>
-                );
-              })}
-            </div>
+          <div className="prediction-container">
+            <table className="prediction-table">
+              <thead>
+                <tr>
+                  <th>Predicted Position</th>
+                  <th>Team</th>
+                  <th>Actual Position</th>
+                  <th>Diff</th>
+                </tr>
+              </thead>
+              <tbody>
+                {prediction.teams.map((team, index) => {
+                  const actualPosition = getActualPosition(team.name);
+                  const predictedPosition = index + 1;
+                  const positionDiff =
+                    actualPosition !== "N/A"
+                      ? actualPosition - predictedPosition
+                      : "N/A";
 
-            <div className="team-column">
-              {prediction.teams.slice(10, 20).map((team, index) => {
-                const actualPosition = getActualPosition(team.name); // Get the actual position of the team
-                return (
-                  <div key={index} className="draggable-item">
-                    <span className="predicted-position">{index + 11}</span>
-                    <img src={team.logo} alt={`${team.name} logo`} width="40" />
-                    <span className="team-name">{team.name === 'Wolverhampton Wanderers' ? 'Wolves' : team.name}</span>
-                    <span className="actual-position">
-                      {actualPosition}
-                    </span>{" "}
-                    {/* Actual position on the right */}
-                  </div>
-                );
-              })}
-            </div>
+                  return (
+                    <tr key={index}>
+                      <td>{predictedPosition}</td>
+                      <td>
+                        <img
+                          src={team.logo}
+                          alt={`${team.name} logo`}
+                          width="40"
+                        />{" "}
+                        {team.name}
+                      </td>
+                      <td>{actualPosition}</td>
+                      <td>
+                        {getArrow(predictedPosition, actualPosition)}
+                        {positionDiff !== "N/A" && positionDiff !== 0
+                          ? `(${
+                              positionDiff > 0
+                                ? `+${positionDiff}`
+                                : positionDiff
+                            })`
+                          : ""}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            {/* New Stats Table */}
           </div>
         )}
+        // End of Display Form
       </div>
+      <table className="stats-table">
+        <thead>
+          <tr>
+            <th>Stat</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Correct Positions</td>
+            <td>{stats.correctCount}</td>
+          </tr>
+          <tr>
+            <td>One Off</td>
+            <td>{stats.oneOffCount}</td>
+          </tr>
+          <tr>
+            <td>Two Off</td>
+            <td>{stats.twoOffCount}</td>
+          </tr>
+          <tr>
+            <td>Furthest Prediction</td>
+            <td>
+              {stats.furthestTeam} ({stats.furthestDiff})
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
