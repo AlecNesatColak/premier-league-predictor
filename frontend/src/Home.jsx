@@ -8,7 +8,7 @@ function Home() {
   const [error, setError] = useState("");
 
   const handleFormClick = () => {
-    navigate("/form");
+    navigate("/prediction-form");
   };
 
   const handlePredictionClick = () => {
