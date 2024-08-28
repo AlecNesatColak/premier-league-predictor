@@ -18,27 +18,38 @@ const DisplayPrediction = () => {
       .trim();
   };
 
-  const fetchActualPositions = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL_PROD}/api/standings`
-      );
-      const standings = response.data.standings[0].table;
+const fetchActualPositions = async () => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL_PROD}/api/standings`
+    );
+    const standings = response.data.standings[0].table;
 
-      const positionMap = {};
-      let currentPosition = 1;
+    const positionMap = {};
+    let currentPosition = 1; // Start with the first position
+    let previousPosition = null; // To track the previous position for comparison
 
-      standings.forEach((standing) => {
-        positionMap[standing.team.name] = currentPosition;
-        currentPosition = standing.position;
-      });
+    standings.forEach((standing, index) => {
+      // Compare current standing position with the previous one
+      if (previousPosition === standing.position) {
+        currentPosition += 1; // If tied, increment position by 1
+      } else {
+        currentPosition = standing.position; // Set the correct position if not tied
+      }
 
-      setTeamPositionMap(positionMap);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setError("Error fetching data from Football Data API.");
-    }
-  };
+      // Map the team name to the adjusted position
+      positionMap[standing.team.name] = currentPosition; 
+      
+      // Update the previous position to the current one
+      previousPosition = standing.position;
+    });
+
+    setTeamPositionMap(positionMap); // Store the position map with updated positions
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    setError("Error fetching data from Football Data API.");
+  }
+};
 
   const getActualPosition = (teamName) => {
     const normalizedPredictionName = normalizeTeamName(teamName);
@@ -127,6 +138,8 @@ const DisplayPrediction = () => {
 
   return (
     <div className="app-container">
+      <div className="left-side"></div>
+      <div className="right-side"></div>
       <div className="display-form-content">
         <h1 className="text">{user}'s Premier League Prediction</h1>
         <div>
@@ -195,7 +208,6 @@ const DisplayPrediction = () => {
             {/* New Stats Table */}
           </div>
         )}
-        // End of Display Form
       </div>
       <table className="stats-table">
         <thead>
