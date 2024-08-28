@@ -127,8 +127,6 @@ const DisplayPrediction = () => {
 
   return (
     <div className="app-container">
-      <div className="left-side"></div>
-      <div className="right-side"></div>
       <div className="display-form-content">
         <h1 className="text">{user}'s Premier League Prediction</h1>
         <div>

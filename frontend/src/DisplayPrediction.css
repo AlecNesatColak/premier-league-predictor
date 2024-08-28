@@ -1,20 +1,19 @@
 /* Global Styles */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
   height: 100%;
-  overflow-y: auto; /* Allow vertical scrolling */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-/* Flexbox container for left and right backgrounds */
 .app-container {
   display: flex;
-  min-height: 100vh; /* Ensure it takes at least the full viewport height */
-  overflow: auto; /* Enable scrolling when content overflows */
-  width: 100vw; /* Ensure it takes up the full viewport width */
+  min-height: 100vh;
+  width: 100vw;
   position: relative;
 }
 
@@ -26,6 +25,7 @@ html, body {
 
 /* Center the content in the middle of the page */
 .display-form-content {
+  margin-top: 18vh;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -36,16 +36,15 @@ html, body {
   padding: 20px;
   border-radius: 20px;
   background-color: rgba(0, 0, 0, 0.6);
-  width: 90vw; /* Use vw to ensure form doesn't overflow horizontally */
-  max-width: 900px; /* Maximum width for larger screens */
+  width: 90vw;
+  max-width: 900px;
   align-items: center;
-  overflow-y: auto; /* Enable scrolling within the form if content is too large */
-  margin-top: 200px;
+  overflow-y: auto;
 }
 
-/* Styling for the draggable items in the prediction display */
+/* Draggable items styling */
 .draggable-item {
-  padding: 10px; /* Reduced padding for a smaller item size */
+  padding: 10px;
   margin-bottom: 8px;
   background-color: white;
   border-radius: 5px;
@@ -59,8 +58,6 @@ html, body {
 
 .draggable-item img {
   margin-right: 10px;
-  align-items: left;
-  justify-content: center;
   width: 30px;
   height: 30px;
 }
@@ -73,10 +70,10 @@ html, body {
   font-weight: bold;
   color: #ff5733;
   text-align: right;
-  margin-left: auto; /* Ensure it aligns to the right */
+  margin-left: auto;
 }
 
-/* Container for the two columns */
+/* Table container for responsiveness */
 .table-container {
   display: flex;
   justify-content: space-between;
@@ -84,26 +81,23 @@ html, body {
   box-sizing: border-box;
 }
 
-/* Styling for each column */
+/* Styling for columns */
 .team-column {
-  width: 47%; /* Reduced width to make the columns smaller */
+  width: 47%;
 }
 
 .predicted-position {
   text-align: left;
-  flex-grow: 0 !important;
 }
 
 .team-name {
-  flex-grow: 1;
   text-align: left;
 }
 
 .arrow-down {
-  color: red; /* Red for worse performance */
+  color: red;
 }
 
-/* Styling for the form */
 form {
   background-color: rgba(0, 0, 0, 0.9);
   width: 100%;
@@ -114,14 +108,8 @@ form {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.display-form {
-  position: relative;
-  left: 15%;
-}
-
-/* Input field styles */
 input[type="text"] {
-  width: 100%; /* Make input field take full width */
+  width: 100%;
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #ddd;
@@ -129,7 +117,6 @@ input[type="text"] {
   font-size: 16px;
 }
 
-/* Button styling */
 button {
   width: 100%;
   margin-bottom: 10px;
@@ -141,25 +128,25 @@ button {
   cursor: pointer;
 }
 
-/* Hover effect on buttons */
 button:hover {
   background-color: #45a049;
 }
 
-/* General styles for the stats table */
+/* Updated stats table */
 .stats-table {
-  width: 500px;
-  border-collapse: collapse;
-  margin-left: 1800px; /* Creates space between the form and the stats table */
-  margin-top: 240px;
+  width: 20%; /* Relative width */
+  height: 40%;
+  max-width: 800px; /* Ensure it doesn't get too wide */
+  margin: 0 auto; /* Center the table */
+  margin-top: 18vh;
   font-size: 0.9em;
   border: 1px solid #ddd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  float: right; /* Floats the table to the right of the form */
-  height: 300px;
+  margin-left: 135vh;
 }
 
-.stats-table th, .stats-table td {
+.stats-table th,
+.stats-table td {
   padding: 8px 12px;
   text-align: left;
   border: 1px solid #ddd;
@@ -178,39 +165,16 @@ button:hover {
   background-color: #f9f9f9;
 }
 
-/* Container styling to ensure the display form and the table are aligned properly */
-.prediction-container {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-/* Responsive styling for smaller screens */
+/* Responsive styling */
 @media (max-width: 768px) {
-  .prediction-container {
-    flex-direction: column;
-  }
-
   .stats-table {
-    width: 100%;
-    margin-left: 0;
+    width: 10%;
     margin-top: 20px;
-    float: none;
-  }
-}
-
-
-/* Media query for mobile responsiveness */
-@media (max-width: 768px) {
-  .content {
-    width: 90%;
   }
 
-  .table-container {
-    flex-direction: column;
-  }
-
-  .team-column {
-    width: 100%;
+  .display-form-content{
+    margin-top: 80vh;
+    margin-left: 0;
+    width: 70%;
   }
 }
