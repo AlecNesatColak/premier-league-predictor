@@ -28,7 +28,7 @@ function Login() {
       // Extract the token from the response
       const { token } = response.data;
 
-      console.log("Token:", token);
+      //console.log("Token:", token);
 
       // Save the token in localStorage
       localStorage.setItem("authToken", token);
