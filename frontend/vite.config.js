@@ -13,5 +13,14 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""), // Remove /api from the request URL
       },
     },
+    port: 5173, // Ensure the server binds to the correct port in production
+  },
+  build: {
+    outDir: 'dist', // Define the output directory for the build
+    sourcemap: true, // Optional: Include sourcemaps in production builds for debugging
+  },
+  preview: {
+    port: 5173, // Use the correct port for preview in production
   },
 });
+
