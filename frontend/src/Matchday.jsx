@@ -104,7 +104,7 @@ const Matchday = () => {
           }/api/matchweek?matchday=${matchdayNumber}`
         );
         const data = await response.json();
-        console.log("Matchweek data:", data);
+        // console.log("Matchweek data:", data);
         setMatches(data.matches);
         setLoading(false);
       } catch (error) {
