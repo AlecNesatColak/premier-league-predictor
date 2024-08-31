@@ -45,8 +45,8 @@ const Matchweek = ({ matches }) => {
                 {match.score.fullTime.home} - {match.score.fullTime.away}
               </td>
               <td>
-                {match.status === "FINISHED" || match.status === "LIVE"
-                  ? match.status
+                {(match.status === "FINISHED" || match.status === "IN_PLAY")
+                  ? (match.status === "IN_PLAY" ? "LIVE" : match.status)
                   : convertToEST(match.utcDate)}
               </td>
             </tr>
