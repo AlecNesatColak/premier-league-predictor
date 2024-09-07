@@ -41,6 +41,7 @@ html, body {
   align-items: center;
   box-sizing: border-box; /* Ensure padding is included within the width */
   overflow-y: auto; /* Enable scrolling within the form if content is too large */
+  margin-top: 20vw;
 }
 
 /* Styling for the form */

@@ -22,20 +22,16 @@ const allowedOrigins = [
   "https://premier-league-predictor.vercel.app", // Vercel deployed frontend URL
 ];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (allowedOrigins.includes(origin) || !origin) {
-        // Allow requests with no origin (e.g., Postman)
-        callback(null, true);
-      } else {
-        console.error("Not allowed by CORS: ", origin);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: (origin, callback) => {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true); // Allow request
+    } else {
+      callback(new Error('Not allowed by CORS')); // Block request
+    }
+  },
+  credentials: true, // Allow credentials such as cookies, authorization headers
+}));
 
 // API routes
 app.post("/api/prediction", async (req, res) => {
