@@ -1,8 +1,9 @@
 /* Adjust the size of the team logos */
-.matchweek-container img {
-  width: 40px; /* Adjust the width of the logos */
-  height: auto; /* Keep the aspect ratio */
-  vertical-align: middle; /* Align vertically with the text */
+.matchweek-container img,
+.prediction-form-container img {
+  width: 40px; /* Ensure consistency in logo sizes */
+  height: auto;
+  vertical-align: middle;
 }
 
 /* Container for side-by-side tables */
@@ -10,69 +11,62 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%; /* Ensure the container takes full width */
+  height: 70vh;
 }
 
-/* Matchweek table */
+/* Matchweek container */
 .matchweek-container {
-  width: 60%; /* Adjust width as necessary */
-  align-items: center;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  min-height: 80vh; /* Ensures it takes full viewport height */
 }
 
+/* Prediction form container */
 .prediction-form-container {
-  width: 30%; /* Adjust width as necessary */
+  width: 30%;
   align-items: center;
   justify-content: center;
 }
 
-.prediction-form-container img {
-  width: 30px; /* Adjust the width of the logos */
-  height: auto; /* Keep the aspect ratio */
-  vertical-align: middle; /* Align vertically with the text */
-}
-
+/* Title styling */
 .matchday-h1 {
   text-align: center;
+  margin-top: 10vh;
   color: white;
+  font-size: 24px; /* Adjust font size */
 }
 
+/* Table styling */
 table {
   width: 100%;
   border-collapse: collapse;
-  color: white;
-  background-color: white;
+  color: #37003c; /* Darker text color for better readability */
+  background-color: #f5f5f5; /* Light background for better contrast */
+  margin-top: 20px;
 }
 
 th,
 td {
   padding: 10px;
   text-align: left;
-  border-bottom: 1px solid white;
-  color: #37003c;
+  border-bottom: 1px solid #ddd; /* Soft border */
+}
+
+/* Button styling */
+.matchday-button,
+.edit-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
 }
 
 .matchday-button {
-  padding: 10px 15px;
   background-color: #4caf50;
-  color: #37003c;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-
-.edit-button {
-  padding: 10px 15px;
-  background-color: blue;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-
-.edit-button:hover {
-  background-color: rgb(20, 20, 165);
   color: white;
 }
 
@@ -80,13 +74,20 @@ td {
   background-color: #45a049;
 }
 
+.edit-button {
+  background-color: blue;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: rgb(20, 20, 165);
+}
+
+/* Button container */
 .button-container {
   display: flex;
   justify-content: center;
+  gap: 20px; /* Space between buttons */
   margin-top: 20px;
   margin-bottom: 20px;
-}
-
-.button-container button {
-  margin: 0 10px;
 }
