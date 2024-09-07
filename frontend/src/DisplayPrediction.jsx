@@ -21,7 +21,7 @@ const DisplayPrediction = () => {
   const fetchActualPositions = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL_DEV}/api/standings`
+        `${import.meta.env.VITE_BACKEND_URL_PROD}/api/standings`
       );
       const standings = response.data.standings[0].table;
 
@@ -57,7 +57,7 @@ const DisplayPrediction = () => {
     const fetchPrediction = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL_DEV}/api/prediction/${user}`
+          `${import.meta.env.VITE_BACKEND_URL_PROD}/api/prediction/${user}`
         );
         setPrediction(response.data.data);
       } catch (err) {

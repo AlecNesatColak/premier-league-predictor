@@ -99,10 +99,10 @@ const PredictScores = ({ matches, matchdayNumber }) => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL_DEV}/matchweek-predictions`,
+        `${import.meta.env.VITE_BACKEND_URL_PROD}/matchweek-predictions`,
         {
           user: user,
-          matchweek: matchweek, 
+          matchweek: matchweek,
           predictions,
         },
         {
@@ -248,7 +248,7 @@ const Matchday = () => {
       try {
         const response = await fetch(
           `${
-            import.meta.env.VITE_BACKEND_URL_DEV
+            import.meta.env.VITE_BACKEND_URL_PROD
           }/api/matchweek?matchday=${matchdayNumber}`
         );
         const data = await response.json();
@@ -283,7 +283,7 @@ const Matchday = () => {
     try {
       const response = await axios.get(
         `${
-          import.meta.env.VITE_BACKEND_URL_DEV
+          import.meta.env.VITE_BACKEND_URL_PROD
         }/api/check-predictions/${user}/${matchdayNumber}`
       );
 
@@ -324,7 +324,7 @@ const Matchday = () => {
               matches={matches}
             />
           ) : (
-            <PredictScores matches={matches} matchdayNumber={matchdayNumber}/>
+            <PredictScores matches={matches} matchdayNumber={matchdayNumber} />
           )}
         </div>
       ) : (
