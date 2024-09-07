@@ -1,17 +1,19 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-// Mock function to check if the user is logged in. Replace this with your real auth logic.
-const isAuthenticated = () => {
-  return localStorage.getItem("authToken");  // Assume token is stored in localStorage
-};
+const ProtectedRoute = ({ element: Component }) => {
+  const token = localStorage.getItem("authToken");
 
-const ProtectedRoute = ({ element }) => {
-  if (!isAuthenticated()) {
+  // Check if the token exists
+  const isAuthenticated = token ? true : false;
+
+  if (!isAuthenticated) {
+    // Redirect to login if not authenticated
     return <Navigate to="/login" replace />;
   }
 
-  return element;
+  // Render the protected component if authenticated
+  return <Component />;
 };
 
 export default ProtectedRoute;

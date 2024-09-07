@@ -21,16 +21,15 @@ const DisplayPrediction = () => {
   const fetchActualPositions = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL_PROD}/api/standings`
+        `${import.meta.env.VITE_BACKEND_URL_DEV}/api/standings`
       );
       const standings = response.data.standings[0].table;
 
       const positionMap = {};
-      let currentPosition = 1;
 
-      standings.forEach((standing) => {
-        positionMap[standing.team.name] = currentPosition;
-        currentPosition = standing.position;
+      standings.forEach((standing, index) => {
+        // Assign the position based on the index
+        positionMap[standing.team.name] = index + 1; // Actual position is index + 1
       });
 
       setTeamPositionMap(positionMap);
@@ -58,7 +57,7 @@ const DisplayPrediction = () => {
     const fetchPrediction = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL_PROD}/api/prediction/${user}`
+          `${import.meta.env.VITE_BACKEND_URL_DEV}/api/prediction/${user}`
         );
         setPrediction(response.data.data);
       } catch (err) {

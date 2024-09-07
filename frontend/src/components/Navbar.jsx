@@ -27,6 +27,8 @@ const Navbar = () => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("authToken");
       if (!token) {
+        alert("User not Authenticated");
+        navigate("/login");
         throw new Error("No token found in localStorage");
       }
 
@@ -42,6 +44,7 @@ const Navbar = () => {
         console.log("User data:", response.data);
         setUserData(response.data);
       } catch (error) {
+        navigate("/login");
         console.error("Error fetching user data:", error);
       }
     };
