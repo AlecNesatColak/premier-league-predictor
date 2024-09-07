@@ -8,24 +8,32 @@
 /* Container for side-by-side tables */
 .tables-container {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 20px;
-  gap: 10px; /* Adds spacing between the matchweek and prediction form */
+  justify-content: center;
+  align-items: center;
 }
 
 /* Matchweek table */
 .matchweek-container {
   width: 60%; /* Adjust width as necessary */
+  align-items: center;
+  justify-content: center;
 }
 
 .prediction-form-container {
-  width: 35%; /* Adjust width as necessary */
+  width: 30%; /* Adjust width as necessary */
+  align-items: center;
+  justify-content: center;
 }
 
-.matchday-h1{
-    text-align: center;
-    color: white;
+.prediction-form-container img {
+  width: 30px; /* Adjust the width of the logos */
+  height: auto; /* Keep the aspect ratio */
+  vertical-align: middle; /* Align vertically with the text */
+}
+
+.matchday-h1 {
+  text-align: center;
+  color: white;
 }
 
 table {
@@ -35,7 +43,8 @@ table {
   background-color: white;
 }
 
-th, td {
+th,
+td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid white;
@@ -52,7 +61,22 @@ th, td {
   margin-bottom: 10px;
 }
 
-button:hover {
+.edit-button {
+  padding: 10px 15px;
+  background-color: blue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.edit-button:hover {
+  background-color: rgb(20, 20, 165);
+  color: white;
+}
+
+.matchday-button:hover {
   background-color: #45a049;
 }
 

@@ -22,16 +22,18 @@ const allowedOrigins = [
   "https://premier-league-predictor.vercel.app", // Vercel deployed frontend URL
 ];
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true); // Allow request
-    } else {
-      callback(new Error('Not allowed by CORS')); // Block request
-    }
-  },
-  credentials: true, // Allow credentials such as cookies, authorization headers
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        callback(null, true); // Allow request
+      } else {
+        callback(new Error("Not allowed by CORS")); // Block request
+      }
+    },
+    credentials: true, // Allow credentials such as cookies, authorization headers
+  })
+);
 
 // API routes
 app.post("/api/prediction", async (req, res) => {
@@ -269,6 +271,58 @@ app.get(`/api/check-predictions/:user/:matchday`, async (req, res) => {
   } catch (error) {
     console.error("Error checking predictions:", error);
     return res.status(500).json({ error: "Error checking predictions" });
+  }
+});
+
+app.put("/update-matchday-predictions", authenticateToken, async (req, res) => {
+  const { user, matchweek, predictions } = req.body;
+  console.log(req.body);
+
+  try {
+    const existingPrediction = await MatchDayPredictions.findOne({
+      user,
+      matchweek,
+    });
+    if (!existingPrediction) {
+      return res
+        .status(404)
+        .json({ error: "No existing predictions found for this matchday." });
+    }
+
+    existingPrediction.predictions = predictions;
+    await existingPrediction.save();
+
+    return res
+      .status(200)
+      .json({ message: "Predictions updated successfully." });
+  } catch (error) {
+    console.error("Error updating predictions:", error);
+    return res.status(500).json({ error: "Error updating predictions" });
+  }
+});
+
+app.delete("/delete-matchday-predictions", authenticateToken, async (req, res) => {
+  const { user, matchweek } = req.query;  // use query parameters instead of body
+
+  try {
+    // Find and delete the predictions
+    const existingPrediction = await MatchDayPredictions.findOneAndDelete({
+      user,
+      matchweek,
+    });
+
+    if (!existingPrediction) {
+      return res
+        .status(404)
+        .json({ error: "No existing predictions found for this matchday." });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Predictions deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting predictions:", error);
+    return res.status(500).json({ error: "Error deleting predictions" });
   }
 });
 

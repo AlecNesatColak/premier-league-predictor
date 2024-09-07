@@ -3,76 +3,27 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./Matchday.css"; // Import your CSS file
 import axios from "axios";
 
-// Component to display a table of matches
-const Matchweek = ({ matches }) => {
-  const convertToEST = (utcDate) => {
-    const date = new Date(utcDate); // Convert the string to a Date object
-    return date.toLocaleString("en-US", {
-      timeZone: "America/New_York", // Timezone for EST/EDT
-      weekday: "short", // Short weekday format, e.g., "Sun"
-      year: "numeric",
-      month: "short", // Short month format, e.g., "Aug"
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: true, // Display in 12-hour format (AM/PM)
-    });
-  };
-
-  return (
-    <div className="matchweek-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Home Team</th>
-            <th>Away Team</th>
-            <th>Score</th>
-            <th>Match Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {matches.map((match) => (
-            <tr key={match.id}>
-              <td>
-                <img src={match.homeTeam.crest} alt={match.homeTeam.name} />
-                {match.homeTeam.name}
-              </td>
-              <td>
-                <img src={match.awayTeam.crest} alt={match.awayTeam.name} />
-                {match.awayTeam.name}
-              </td>
-              <td>
-                {match.score.fullTime.home} - {match.score.fullTime.away}
-              </td>
-              <td>
-                {(match.status === "FINISHED" || match.status === "IN_PLAY")
-                  ? (match.status === "IN_PLAY" ? "LIVE" : match.status)
-                  : convertToEST(match.utcDate)}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
 const PredictScores = ({ matches, matchdayNumber }) => {
-  const [predictions, setPredictions] = useState(
-    matches.map((match) => ({
-      matchId: match.id,
-      homeTeamScore: "",
-      awayTeamScore: "",
-    }))
-  );
+  const [predictions, setPredictions] = useState([]);
+
+  // Update predictions when matches change
+  useEffect(() => {
+    setPredictions(
+      matches.map((match) => ({
+        matchId: match.id,
+        homeTeamScore: "",
+        awayTeamScore: "",
+      }))
+    );
+  }, [matches]);
 
   // Handle score changes and update the state
   const handleScoreChange = (matchId, field, value) => {
+    const numericValue = value === "" ? "" : parseInt(value, 10); // Convert to number if not empty
     setPredictions((prevPredictions) =>
       prevPredictions.map((prediction) =>
         prediction.matchId === matchId
-          ? { ...prediction, [field]: value }
+          ? { ...prediction, [field]: numericValue }
           : prediction
       )
     );
@@ -89,7 +40,10 @@ const PredictScores = ({ matches, matchdayNumber }) => {
     // Ensure all predictions are filled
     const allFilled = predictions.every(
       (prediction) =>
-        prediction.homeTeamScore !== "" && prediction.awayTeamScore !== ""
+        prediction.homeTeamScore !== "" &&
+        !isNaN(prediction.homeTeamScore) &&
+        prediction.awayTeamScore !== "" &&
+        !isNaN(prediction.awayTeamScore)
     );
 
     if (!allFilled) {
@@ -114,6 +68,7 @@ const PredictScores = ({ matches, matchdayNumber }) => {
 
       if (response.status === 201) {
         alert("Predictions submitted successfully!");
+        window.location.reload();
       } else {
         alert("Error submitting predictions.");
       }
@@ -138,7 +93,10 @@ const PredictScores = ({ matches, matchdayNumber }) => {
           <tbody>
             {matches.map((match) => (
               <tr key={match.id}>
-                <td>{match.homeTeam.name}</td>{" "}
+                <td>
+                  <img src={match.homeTeam.crest} />
+                  {match.homeTeam.name}
+                </td>{" "}
                 {/* Access a specific property of the object */}
                 <td>
                   <input
@@ -157,7 +115,10 @@ const PredictScores = ({ matches, matchdayNumber }) => {
                     }
                   />
                 </td>
-                <td>{match.awayTeam.name}</td>{" "}
+                <td>
+                  <img src={match.awayTeam.crest} />
+                  {match.awayTeam.name}
+                </td>{" "}
                 {/* Access a specific property of the object */}
                 <td>
                   <input
@@ -186,7 +147,38 @@ const PredictScores = ({ matches, matchdayNumber }) => {
   );
 };
 
-const DisplayMatchDayPredictions = ({ predictions, matches }) => {
+const DisplayMatchDayPredictions = ({
+  predictions,
+  matches,
+  isEditing,
+  setPredictions,
+}) => {
+  const handleScoreChange = (matchId, field, value) => {
+    const numericValue = value === "" ? "" : parseInt(value, 10);
+    setPredictions((prevPredictions) =>
+      prevPredictions.map((prediction) =>
+        prediction.matchId === matchId
+          ? { ...prediction, [field]: numericValue }
+          : prediction
+      )
+    );
+  };
+
+  const convertToEST = (utcDate) => {
+    const date = new Date(utcDate); // Convert the string to a Date object
+    return date.toLocaleString("en-US", {
+      timeZone: "America/New_York", // Timezone for EST/EDT
+      weekday: "short", // Short weekday format, e.g., "Sun"
+      year: "numeric",
+      month: "short", // Short month format, e.g., "Aug"
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true, // Display in 12-hour format (AM/PM)
+    });
+  };
+
   return (
     <div className="matchweek-container">
       <h2>Your Predictions</h2>
@@ -197,6 +189,7 @@ const DisplayMatchDayPredictions = ({ predictions, matches }) => {
             <th>Away Team</th>
             <th>Your Prediction</th>
             <th>Actual Score</th>
+            <th>Match Status</th>
           </tr>
         </thead>
         <tbody>
@@ -217,12 +210,45 @@ const DisplayMatchDayPredictions = ({ predictions, matches }) => {
                   {match.awayTeam.name}
                 </td>
                 <td>
-                  {prediction.homeTeamScore} - {prediction.awayTeamScore}{" "}
-                  {/* User's prediction */}
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="number"
+                        value={prediction.homeTeamScore}
+                        onChange={(e) =>
+                          handleScoreChange(
+                            prediction.matchId,
+                            "homeTeamScore",
+                            e.target.value
+                          )
+                        }
+                      />
+                      {" - "}
+                      <input
+                        type="number"
+                        value={prediction.awayTeamScore}
+                        onChange={(e) =>
+                          handleScoreChange(
+                            prediction.matchId,
+                            "awayTeamScore",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </>
+                  ) : (
+                    `${prediction.homeTeamScore} - ${prediction.awayTeamScore}`
+                  )}
                 </td>
                 <td>
-                  {match.score.fullTime.home} - {match.score.fullTime.away}{" "}
-                  {/* Actual score */}
+                  {match.score.fullTime.home} - {match.score.fullTime.away}
+                </td>
+                <td>
+                  {match.status === "FINISHED" || match.status === "IN_PLAY"
+                    ? match.status === "IN_PLAY"
+                      ? "LIVE"
+                      : match.status
+                    : convertToEST(match.utcDate)}
                 </td>
               </tr>
             );
@@ -237,14 +263,13 @@ const Matchday = () => {
   const { matchdayNumber } = useParams(); // Get matchday number from URL
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [predictions, setPredictions] = useState(null); // Add predictions state
-  const [checkingPredictions, setCheckingPredictions] = useState(false); // Loading state for checking predictions
-  const navigate = useNavigate(); // Use navigate for "Next Matchday" and "Show Selections" buttons
+  const [predictions, setPredictions] = useState(null); // Store predictions if available
+  const [checkingPredictions, setCheckingPredictions] = useState(true); // Start with checking predictions
+  const [isEditing, setIsEditing] = useState(false); // Track editing mode
+  const navigate = useNavigate(); // Use navigate for "Next Matchday" button
 
   useEffect(() => {
-    // Fetch matches for the current matchday
     const fetchMatches = async () => {
-      setLoading(true);
       try {
         const response = await fetch(
           `${
@@ -252,7 +277,6 @@ const Matchday = () => {
           }/api/matchweek?matchday=${matchdayNumber}`
         );
         const data = await response.json();
-        // console.log("Matchweek data:", data);
         setMatches(data.matches);
         setLoading(false);
       } catch (error) {
@@ -261,51 +285,114 @@ const Matchday = () => {
       }
     };
 
+    const fetchPredictions = async () => {
+      const user = localStorage.getItem("username");
+      setCheckingPredictions(true); // Start checking predictions
+
+      try {
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_BACKEND_URL_PROD
+          }/api/check-predictions/${user}/${matchdayNumber}`
+        );
+        const data = response.data;
+        if (data.exists) {
+          setPredictions(data.data.predictions);
+        } else {
+          setPredictions(null);
+        }
+      } catch (err) {
+        console.error("Error fetching user matchday predictions data:", err);
+      } finally {
+        setCheckingPredictions(false); // Done checking predictions
+      }
+    };
+
     fetchMatches();
-  }, [matchdayNumber]); // Refetch when matchdayNumber changes
+    fetchPredictions();
+  }, [matchdayNumber]);
 
-  useEffect(() => {
-    console.log("Predictions state updated:", predictions);
-  }, [predictions]);
-
-  // Handle navigation to the next matchday
   const handleNextMatchday = () => {
     const nextMatchday = parseInt(matchdayNumber) + 1;
     if (nextMatchday <= 38) {
-      navigate(`/matchday/${nextMatchday}`); // Navigate to next matchday
+      navigate(`/matchday/${nextMatchday}`);
     }
   };
 
-  // Handle showing the user's predictions
-  const handleShowPredictions = async () => {
+  const handlePreviousMatchday = () => {
+    const prevMatchday = parseInt(matchdayNumber) - 1;
+    if (prevMatchday <= 38) {
+      navigate(`/matchday/${prevMatchday}`);
+    }
+  };
+
+  const handleEditPredictions = () => {
+    setIsEditing(true);
+  };
+
+  const handleDeletePredictions = async () => {
+    const token = localStorage.getItem("authToken");
     const user = localStorage.getItem("username");
-    setCheckingPredictions(true); // Start checking predictions
 
     try {
-      const response = await axios.get(
-        `${
-          import.meta.env.VITE_BACKEND_URL_PROD
-        }/api/check-predictions/${user}/${matchdayNumber}`
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL_PROD}/delete-matchday-predictions`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            user: user,
+            matchweek: matchdayNumber, // send user and matchweek as query parameters
+          },
+        }
       );
 
-      const data = response.data;
-      console.log("Response data:", data);
-
-      if (data.exists) {
-        // User has already submitted predictions, update the state with the predictions array
-        setPredictions(data.data.predictions); // Correctly access the predictions array
+      if (response.status === 200) {
+        alert("Predictions deleted successfully!");
+        window.location.reload();
       } else {
-        // No predictions, clear the predictions state to show the form
-        setPredictions(null);
+        alert("Error deleting predictions.");
       }
-    } catch (err) {
-      console.error("Error fetching user matchday predictions data:", err);
-    } finally {
-      setCheckingPredictions(false); // Done checking predictions
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to delete predictions. Please try again.");
     }
   };
 
-  // Conditionally render predictions or form based on existence of predictions
+  const handleSaveEditedPredictions = async () => {
+    const token = localStorage.getItem("authToken");
+    const user = localStorage.getItem("username");
+
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL_PROD}/update-matchday-predictions`,
+        {
+          user: user,
+          matchweek: matchdayNumber,
+          predictions: predictions, // Pass the updated predictions
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert("Predictions updated successfully!");
+        setIsEditing(false); // Exit edit mode
+        window.location.reload();
+      } else {
+        alert("Error updating predictions.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to save edited predictions. Please try again.");
+    }
+  };
+
+  // Conditionally render either the prediction form or the submitted predictions
   return (
     <div className="App">
       <h1 className="matchday-h1">Premier League Matchday {matchdayNumber}</h1>
@@ -314,16 +401,40 @@ const Matchday = () => {
         <p>Loading matches...</p>
       ) : matches.length > 0 ? (
         <div className="tables-container">
-          <Matchweek matches={matches} />
-
-          {/* Show either the form or the predictions */}
           {checkingPredictions ? (
             <p>Checking predictions...</p>
           ) : predictions ? (
-            <DisplayMatchDayPredictions
-              predictions={predictions}
-              matches={matches}
-            />
+            <>
+              <DisplayMatchDayPredictions
+                predictions={predictions}
+                matches={matches}
+                isEditing={isEditing}
+                setPredictions={setPredictions}
+              />
+              <div className="button-container">
+                {isEditing ? (
+                  <button
+                    className="matchday-button"
+                    onClick={handleSaveEditedPredictions}
+                  >
+                    Save Predictions
+                  </button>
+                ) : (
+                  <button
+                    className="matchday-button"
+                    onClick={handleEditPredictions}
+                  >
+                    Edit Predictions
+                  </button>
+                )}
+                <button
+                  className="matchday-button"
+                  onClick={handleDeletePredictions}
+                >
+                  Delete Predictions
+                </button>
+              </div>
+            </>
           ) : (
             <PredictScores matches={matches} matchdayNumber={matchdayNumber} />
           )}
@@ -333,11 +444,11 @@ const Matchday = () => {
       )}
 
       <div className="button-container">
+        <button className="matchday-button" onClick={handlePreviousMatchday}>
+          Previous Matchday
+        </button>
         <button className="matchday-button" onClick={handleNextMatchday}>
           Next Matchday
-        </button>
-        <button className="matchday-button" onClick={handleShowPredictions}>
-          Show Your Selections
         </button>
       </div>
     </div>
