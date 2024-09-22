@@ -144,6 +144,34 @@ app.post("/register", async (req, res) => {
   }
 });
 
+app.post("/api/matchday-predictions/:user/:matchday", async (req, res) => {
+  const { user, matchday } = req.params;
+  const { predictions } = req.body;
+
+  if (!predictions) {
+    return res.status(400).json({ message: "Predictions are required" });
+  }
+
+  try {
+    const existingPrediction = await Prediction.findOne
+      ({ user, matchday });
+
+    if (existingPrediction) {
+      existingPrediction.predictions = predictions;
+      await existingPrediction.save();
+      return res.json({ message: "Predictions updated successfully" });
+    }
+
+    const newPrediction = new Prediction({ user, matchday, predictions });
+    await newPrediction.save();
+    res.json({ message: "Predictions saved successfully" });
+  } catch (error) {
+    console.error("Error saving predictions:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
 app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;

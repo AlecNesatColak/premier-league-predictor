@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Matchday.css"; // Import your CSS file
+import axios from "axios";
 
 // Component to display a table of matches
 const Matchweek = ({ matches }) => {
@@ -57,26 +58,82 @@ const Matchweek = ({ matches }) => {
   );
 };
 
+// Component to handle predictions submission
 const PredictScores = ({ matches }) => {
+  const [predictions, setPredictions] = useState(
+    matches.map((match) => ({
+      matchId: match.id,
+      homeTeam: match.homeTeam.name,
+      awayTeam: match.awayTeam.name,
+      homeScore: "",
+      awayScore: "",
+    }))
+  );
+
+  // Handle input changes and update the corresponding prediction
+  const handleScoreChange = (index, field, value) => {
+    const updatedPredictions = [...predictions];
+    updatedPredictions[index][field] = value;
+    setPredictions(updatedPredictions);
+    console.log(updatedPredictions);
+  };
+
+  // Submit predictions to the backend
+  const submitPredictions = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL_DEV}/api/matchday-predictions/:matchday`,
+        { predictions }
+      );
+      alert("Prediction submitted successfully!");
+      // Navigate to a different route if needed
+    } catch (error) {
+      console.error("Error submitting prediction:", error);
+      alert("There was an issue submitting your prediction. Please try again.");
+    }
+  };
+
   return (
     <div className="prediction-form-container">
-      <form>
+      <form onSubmit={submitPredictions}>
         <table>
           <thead>
             <tr>
+              <th>Home Team</th>
               <th>Home Score</th>
               <th>Away Score</th>
+              <th>Away Team</th>
             </tr>
           </thead>
           <tbody>
-            {matches.map((match) => (
-              <tr key={match.id}>
+            {predictions.map((prediction, index) => (
+              <tr key={prediction.matchId}>
+                <td>{prediction.homeTeam}</td>
                 <td>
-                  <input type="number" name="homeScore" />
+                  <input
+                    type="number"
+                    name="homeScore"
+                    value={prediction.homeScore}
+                    onChange={(e) =>
+                      handleScoreChange(index, "homeScore", e.target.value)
+                    }
+                    required
+                  />
                 </td>
                 <td>
-                  <input type="number" name="awayScore" />
+                  <input
+                    type="number"
+                    name="awayScore"
+                    value={prediction.awayScore}
+                    onChange={(e) =>
+                      handleScoreChange(index, "awayScore", e.target.value)
+                    }
+                    required
+                  />
                 </td>
+                <td>{prediction.awayTeam}</td>
               </tr>
             ))}
           </tbody>
@@ -87,6 +144,7 @@ const PredictScores = ({ matches }) => {
   );
 };
 
+// Main Matchday Component
 const Matchday = () => {
   const { matchdayNumber } = useParams(); // Get matchday number from URL
   const [matches, setMatches] = useState([]);
@@ -100,11 +158,10 @@ const Matchday = () => {
       try {
         const response = await fetch(
           `${
-            import.meta.env.VITE_BACKEND_URL_PROD
+            import.meta.env.VITE_BACKEND_URL_DEV
           }/api/matchweek?matchday=${matchdayNumber}`
         );
         const data = await response.json();
-        // console.log("Matchweek data:", data);
         setMatches(data.matches);
         setLoading(false);
       } catch (error) {
@@ -130,6 +187,7 @@ const Matchday = () => {
     navigate(`/matchday/${matchdayNumber}/${user}`); // Navigate to matchday predictions page
   };
 
+  // Render the Matchday component with the matchweek table and prediction form
   return (
     <div className="App">
       <h1 className="matchday-h1">Premier League Matchday {matchdayNumber}</h1>
