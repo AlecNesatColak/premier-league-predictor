@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Navbar.css"; // Import the CSS for the navbar
@@ -6,7 +6,6 @@ import "./Navbar.css"; // Import the CSS for the navbar
 const Navbar = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
-  const [error, setError] = useState(null);
   const [isOpen, setIsOpen] = useState(false); // New state for hamburger menu
 
   // Toggle the hamburger menu
