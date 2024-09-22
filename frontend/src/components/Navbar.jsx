@@ -25,10 +25,21 @@ const Navbar = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("authToken");
+      const currentPath = window.location.pathname;
+
+      // Allow navigation to /register and /login pages without token
+      if (currentPath === "/register" || currentPath === "/login") {
+        return; // Skip token validation for these pages
+      }
+
+      // For all other pages, check for token
       if (!token) {
+        alert("User not authenticated");
+        navigate("/login");
         throw new Error("No token found in localStorage");
       }
 
+      // Fetch user data if token exists
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL_PROD}/me`,
@@ -41,12 +52,13 @@ const Navbar = () => {
         console.log("User data:", response.data);
         setUserData(response.data);
       } catch (error) {
+        navigate("/login");
         console.error("Error fetching user data:", error);
       }
     };
 
     fetchUserData();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   return (
     <nav className="navbar">

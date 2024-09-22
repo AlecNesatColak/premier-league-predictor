@@ -68,6 +68,11 @@ function Register() {
           <br />
           <button onClick={handleRegistration}>Register</button>
           {error && <div className="error-message">{error}</div>}
+          <br />
+          <p>Already have an Account?</p>
+          <button className="button" onClick={() => navigate("/login")}>
+            Login
+          </button>
         </div>
       </div>
     </div>

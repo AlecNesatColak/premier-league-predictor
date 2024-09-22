@@ -82,6 +82,7 @@ function Login() {
             Login
           </button>
           {error && <div className="error-message">{error}</div>}
+          <p>Need to make an Account?</p>
           <button className="button" onClick={() => navigate("/register")}>
             Register
           </button>
