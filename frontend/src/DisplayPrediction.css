@@ -76,22 +76,13 @@ table th {
   font-weight: bold;
 }
 
-table tr:nth-child(odd) {
-  background-color: cadetblue;
+table tr:nth-child() {
+  background-color: rgb(85, 5, 197);
 }
 
-table tr:nth-child(even) {
-  background-color: lightcoral;
-}
 
-.prediction-table tbody tr, .stats-table tbody tr{
-  display: flex;
-        flex-direction: column;
-        margin-bottom: 10px;
-        border: 1px solid #ddd;
-        padding: 10px;
-        border-radius: 5px;
-}
+
+
 
 table tr:hover {
   background-color: #f1f1f1;
@@ -235,5 +226,15 @@ button:hover {
     display: flex;
         justify-content: right;
         padding: 5px 0;
+    }
+
+@media (max-width: 480px) {
+  table tr:nth-child(odd) {
+    background-color: rgba(216, 216, 216, 0.643); /* Slightly darker white for odd rows */
   }
+
+  table tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.036); /* Noticeably darker white for even rows */
+  }
+}
 }
