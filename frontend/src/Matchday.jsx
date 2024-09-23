@@ -80,7 +80,7 @@ const PredictScores = ({ matches, matchdayNumber }) => {
 
   return (
     <div className="prediction-form-container">
-      <form onSubmit={submitMatchdayPredictions}>
+      <form className="matchday-form" onSubmit={submitMatchdayPredictions}>
         <table>
           <thead>
             <tr>
@@ -112,10 +112,11 @@ const PredictScores = ({ matches, matchdayNumber }) => {
                         e.target.value
                       )
                     }
+                    style={{ width: "20px" }} // Adjust the width as needed
                   />
                 </td>
-                <td>
-                  <img src={match.awayTeam.crest} alt={match.awayTeam.name} />
+                <td style={{ maxWidth: "30px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <img src={match.awayTeam.crest} alt={match.awayTeam.name} style={{ maxWidth: "30px", height: "auto" }} />
                   {match.awayTeam.name}
                 </td>
                 <td>
@@ -133,6 +134,7 @@ const PredictScores = ({ matches, matchdayNumber }) => {
                         e.target.value
                       )
                     }
+                    style={{ width: "20px" }} // Adjust the width as needed
                   />
                 </td>
               </tr>
@@ -184,8 +186,9 @@ const DisplayMatchDayPredictions = ({
         <thead>
           <tr>
             <th>Home Team</th>
+            <th>Home Score</th>
             <th>Away Team</th>
-            <th>Your Prediction</th>
+            <th>Away Score</th>
             <th>Actual Score</th>
             <th>Match Status</th>
           </tr>
@@ -204,38 +207,44 @@ const DisplayMatchDayPredictions = ({
                   {match.homeTeam.name}
                 </td>
                 <td>
+                  {isEditing ? (
+                    <input
+                      type="number"
+                      value={prediction.homeTeamScore}
+                      onChange={(e) =>
+                        handleScoreChange(
+                          prediction.matchId,
+                          "homeTeamScore",
+                          e.target.value
+                        )
+                      }
+                      style={{ width: "20px" }} // Adjust the width as needed
+                      className="score-input" // Add a class for mobile width adjustment
+                    />
+                  ) : (
+                    prediction.homeTeamScore
+                  )}
+                </td>
+                <td>
                   <img src={match.awayTeam.crest} alt={match.awayTeam.name} />
                   {match.awayTeam.name}
                 </td>
                 <td>
                   {isEditing ? (
-                    <>
-                      <input
-                        type="number"
-                        value={prediction.homeTeamScore}
-                        onChange={(e) =>
-                          handleScoreChange(
-                            prediction.matchId,
-                            "homeTeamScore",
-                            e.target.value
-                          )
-                        }
-                      />
-                      {" - "}
-                      <input
-                        type="number"
-                        value={prediction.awayTeamScore}
-                        onChange={(e) =>
-                          handleScoreChange(
-                            prediction.matchId,
-                            "awayTeamScore",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </>
+                    <input
+                      type="number"
+                      value={prediction.awayTeamScore}
+                      onChange={(e) =>
+                        handleScoreChange(
+                          prediction.matchId,
+                          "awayTeamScore",
+                          e.target.value
+                        )
+                      }
+                      style={{ width: "20px" }} // Adjust the width as needed
+                    />
                   ) : (
-                    `${prediction.homeTeamScore} - ${prediction.awayTeamScore}`
+                    prediction.awayTeamScore
                   )}
                 </td>
                 <td>

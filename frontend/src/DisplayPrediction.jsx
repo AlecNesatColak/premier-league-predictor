@@ -165,17 +165,17 @@ const DisplayPrediction = () => {
 
                   return (
                     <tr key={index}>
-                      <td>{predictedPosition}</td>
-                      <td className="team-column">
+                      <td data-label="Predicted Position">{predictedPosition}</td>
+                      <td className="team-column" data-label="Team">
                         <img
                           src={team.logo}
                           alt={`${team.name} logo`}
                           width="40"
                         />{" "}
-                        {team.name}
+                        <span>{team.name}</span>
                       </td>
-                      <td>{actualPosition}</td>
-                      <td>
+                      <td data-label="Actual Position">{actualPosition}</td>
+                      <td data-label="Diff">
                         {getArrow(predictedPosition, actualPosition)}
                         {positionDiff !== "N/A" && positionDiff !== 0
                           ? `(${
@@ -200,20 +200,20 @@ const DisplayPrediction = () => {
               </thead>
               <tbody>
                 <tr>
-                  <td>Correct Positions</td>
-                  <td>{stats.correctCount}</td>
+                  <td data-label="Stat">Correct Positions</td>
+                  <td data-label="Value">{stats.correctCount}</td>
                 </tr>
                 <tr>
-                  <td>One Off</td>
-                  <td>{stats.oneOffCount}</td>
+                  <td data-label="Stat">One Off</td>
+                  <td data-label="Value">{stats.oneOffCount}</td>
                 </tr>
                 <tr>
-                  <td>Two Off</td>
-                  <td>{stats.twoOffCount}</td>
+                  <td data-label="Stat">Two Off</td>
+                  <td data-label="Value">{stats.twoOffCount}</td>
                 </tr>
                 <tr>
-                  <td>Furthest Prediction</td>
-                  <td>
+                  <td data-label="Stat">Furthest Prediction</td>
+                  <td data-label="Value">
                     {stats.furthestTeam} ({stats.furthestDiff})
                   </td>
                 </tr>
