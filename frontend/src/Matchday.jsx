@@ -218,7 +218,7 @@ const DisplayMatchDayPredictions = ({
                           e.target.value
                         )
                       }
-                      style={{ width: "20px" }} // Adjust the width as needed
+                      style={{ width: "30px" }} // Adjust the width as needed
                       className="score-input" // Add a class for mobile width adjustment
                     />
                   ) : (
@@ -241,7 +241,7 @@ const DisplayMatchDayPredictions = ({
                           e.target.value
                         )
                       }
-                      style={{ width: "20px" }} // Adjust the width as needed
+                      style={{ width: "30px" }} // Adjust the width as needed
                     />
                   ) : (
                     prediction.awayTeamScore
