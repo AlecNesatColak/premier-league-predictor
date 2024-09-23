@@ -20,6 +20,7 @@ const Navbar = () => {
     setUserData(null);
     alert("You have been logged out.");
     navigate("/login");
+    setIsOpen(false); // Close the menu on logout
   };
 
   useEffect(() => {
@@ -73,20 +74,20 @@ const Navbar = () => {
         {/* Navbar links */}
         <ul className={`navbar-links ${isOpen ? "active" : ""}`}>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
           </li>
           <li>
-            <Link to="/prediction-form">Prediction Form</Link>
+            <Link to="/prediction-form" onClick={() => setIsOpen(false)}>Prediction Form</Link>
           </li>
           {userData && (
             <li>
-              <Link to={`/prediction/${userData.username}`}>
+              <Link to={`/prediction/${userData.username}`} onClick={() => setIsOpen(false)}>
                 Display Prediction
               </Link>
             </li>
           )}
           <li>
-            <Link to="/matchday-selector">MatchWeeks</Link>
+            <Link to="/matchday-selector" onClick={() => setIsOpen(false)}>MatchWeeks</Link>
           </li>
 
           {isAuthenticated ? (
@@ -98,10 +99,10 @@ const Navbar = () => {
           ) : (
             <>
               <li>
-                <Link to="/login">Login</Link>
+                <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
               </li>
               <li>
-                <Link to="/register">Register</Link>
+                <Link to="/register" onClick={() => setIsOpen(false)}>Register</Link>
               </li>
             </>
           )}

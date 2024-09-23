@@ -12,10 +12,13 @@ html, body {
 /* Flexbox container for left and right backgrounds */
 .app-container {
   display: flex;
+  justify-content: center; /* Center the form horizontally */
+  align-items: center; /* Center the form vertically */
   min-height: 100vh; /* Use min-height to ensure it takes at least the full viewport height */
   overflow: auto; /* Enable scrolling when content overflows */
   width: 100vw; /* Ensure it takes up the full viewport width */
   position: relative; /* To control the position of the form within the background */
+  margin-top: 60px; /* Adjust this value based on the height of your navbar */
 }
 
 .form-background {
@@ -26,10 +29,6 @@ html, body {
 
 /* Center the content in the middle of the page */
 .prediction-form-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 1;
   color: black;
   text-align: center;
@@ -38,7 +37,6 @@ html, body {
   background-color: rgba(0, 0, 0, 0.6);
   width: 90vw; /* Use vw to ensure form doesn't overflow horizontally */
   max-width: 700px; /* Maximum width for larger screens */
-  align-items: center;
   box-sizing: border-box; /* Ensure padding is included within the width */
   overflow-y: auto; /* Enable scrolling within the form if content is too large */
 }
@@ -83,6 +81,7 @@ button:hover {
 /* Container for the two columns */
 .table-container {
   display: flex;
+  flex-direction: row; /* Display columns side by side */
   justify-content: space-between;
   width: 100%;
   box-sizing: border-box;
@@ -90,7 +89,8 @@ button:hover {
 
 /* Styling for each column */
 .team-column {
-  width: 47%; /* Reduced width to make the columns smaller */
+  width: 48%; /* Adjust width to fit two columns */
+  margin-bottom: 20px; /* Space between columns */
 }
 
 .draggable-item {
@@ -111,12 +111,16 @@ button:hover {
 
 /* Media query for mobile responsiveness */
 @media (max-width: 768px) {
-  .form-content {
-    top: 5%;
-    left: 5%;
-    transform: none;
-    width: 90vw;
-    margin: 10px auto;
+  .table-container {
+    flex-direction: column; /* Stack columns vertically on smaller screens */
+  }
+
+  .team-column {
+    width: 100%; /* Full width for each column */
+  }
+
+  .prediction-form-content {
+    padding: 10px;
   }
 
   input[type="text"] {
@@ -134,7 +138,7 @@ button:hover {
 }
 
 @media (max-width: 480px) {
-  .form-content {
+  .prediction-form-content {
     max-width: 350px;
   }
 

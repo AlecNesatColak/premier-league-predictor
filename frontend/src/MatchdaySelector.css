@@ -1,8 +1,7 @@
 .matchday-selector-container {
-  position:absolute;
+  position: absolute;
   top: 50%;
   left: 50%;
-  margin: 10px auto; /* Add top margin of 70px to account for the navbar */
   transform: translate(-50%, -50%);
   z-index: 1;
   color: black;
@@ -14,7 +13,7 @@
   max-width: 900px; /* Maximum width for larger screens */
   align-items: center;
   overflow-y: auto; /* Enable scrolling within the form if content is too large */
-  margin-top: 50px;
+  margin-top: 50px; /* Add margin to ensure it doesn't overlap with the navbar */
 }
 
 .matchday-grid {
@@ -49,4 +48,22 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .matchday-selector-container {
+    top: 10%; /* Adjust top position for mobile */
+    transform: translate(-50%, 0); /* Adjust transform for mobile */
+    margin-top: 70px; /* Ensure there's enough space from the top */
+  }
+
+  .matchday-grid {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Adjust grid for mobile */
+  }
+
+  .matchday-box {
+    padding: 15px; /* Adjust padding for mobile */
+    font-size: 14px; /* Adjust font size for mobile */
+  }
 }

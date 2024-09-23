@@ -144,12 +144,12 @@ const DisplayPrediction = () => {
           </button>
         </div>
         {prediction && (
-          <div className="prediction-container">
+          <div className="tables-container">
             <table className="prediction-table">
               <thead>
                 <tr>
                   <th>Predicted Position</th>
-                  <th>Team</th>
+                  <th className="team-column">Team</th>
                   <th>Actual Position</th>
                   <th>Diff</th>
                 </tr>
@@ -166,7 +166,7 @@ const DisplayPrediction = () => {
                   return (
                     <tr key={index}>
                       <td>{predictedPosition}</td>
-                      <td>
+                      <td className="team-column">
                         <img
                           src={team.logo}
                           alt={`${team.name} logo`}
@@ -191,39 +191,37 @@ const DisplayPrediction = () => {
               </tbody>
             </table>
 
-            {/* New Stats Table */}
+            <table className="stats-table">
+              <thead>
+                <tr>
+                  <th>Stat</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Correct Positions</td>
+                  <td>{stats.correctCount}</td>
+                </tr>
+                <tr>
+                  <td>One Off</td>
+                  <td>{stats.oneOffCount}</td>
+                </tr>
+                <tr>
+                  <td>Two Off</td>
+                  <td>{stats.twoOffCount}</td>
+                </tr>
+                <tr>
+                  <td>Furthest Prediction</td>
+                  <td>
+                    {stats.furthestTeam} ({stats.furthestDiff})
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         )}
-        // End of Display Form
       </div>
-      <table className="stats-table">
-        <thead>
-          <tr>
-            <th>Stat</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Correct Positions</td>
-            <td>{stats.correctCount}</td>
-          </tr>
-          <tr>
-            <td>One Off</td>
-            <td>{stats.oneOffCount}</td>
-          </tr>
-          <tr>
-            <td>Two Off</td>
-            <td>{stats.twoOffCount}</td>
-          </tr>
-          <tr>
-            <td>Furthest Prediction</td>
-            <td>
-              {stats.furthestTeam} ({stats.furthestDiff})
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   );
 };

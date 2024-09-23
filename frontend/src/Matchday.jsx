@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import "./Matchday.css"; // Import your CSS file
-import axios from "axios";
-
-// Component to display a table of matches
-const Matchweek = ({ matches }) => {
-import axios from "axios";
+import "./Matchday.css";
 
 const PredictScores = ({ matches, matchdayNumber }) => {
   const [predictions, setPredictions] = useState([]);
@@ -98,10 +94,9 @@ const PredictScores = ({ matches, matchdayNumber }) => {
             {matches.map((match) => (
               <tr key={match.id}>
                 <td>
-                  <img src={match.homeTeam.crest} />
+                  <img src={match.homeTeam.crest} alt={match.homeTeam.name} />
                   {match.homeTeam.name}
-                </td>{" "}
-                {/* Access a specific property of the object */}
+                </td>
                 <td>
                   <input
                     type="number"
@@ -120,10 +115,9 @@ const PredictScores = ({ matches, matchdayNumber }) => {
                   />
                 </td>
                 <td>
-                  <img src={match.awayTeam.crest} />
+                  <img src={match.awayTeam.crest} alt={match.awayTeam.name} />
                   {match.awayTeam.name}
-                </td>{" "}
-                {/* Access a specific property of the object */}
+                </td>
                 <td>
                   <input
                     type="number"
@@ -263,93 +257,6 @@ const DisplayMatchDayPredictions = ({
   );
 };
 
-// Component to handle predictions submission
-const PredictScores = ({ matches }) => {
-  const [predictions, setPredictions] = useState(
-    matches.map((match) => ({
-      matchId: match.id,
-      homeTeam: match.homeTeam.name,
-      awayTeam: match.awayTeam.name,
-      homeScore: "",
-      awayScore: "",
-    }))
-  );
-
-  // Handle input changes and update the corresponding prediction
-  const handleScoreChange = (index, field, value) => {
-    const updatedPredictions = [...predictions];
-    updatedPredictions[index][field] = value;
-    setPredictions(updatedPredictions);
-    console.log(updatedPredictions);
-  };
-
-  // Submit predictions to the backend
-  const submitPredictions = async (e) => {
-    e.preventDefault();
-
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL_DEV}/api/matchday-predictions/:matchday`,
-        { predictions }
-      );
-      alert("Prediction submitted successfully!");
-      // Navigate to a different route if needed
-    } catch (error) {
-      console.error("Error submitting prediction:", error);
-      alert("There was an issue submitting your prediction. Please try again.");
-    }
-  };
-
-  return (
-    <div className="prediction-form-container">
-      <form onSubmit={submitPredictions}>
-        <table>
-          <thead>
-            <tr>
-              <th>Home Team</th>
-              <th>Home Score</th>
-              <th>Away Score</th>
-              <th>Away Team</th>
-            </tr>
-          </thead>
-          <tbody>
-            {predictions.map((prediction, index) => (
-              <tr key={prediction.matchId}>
-                <td>{prediction.homeTeam}</td>
-                <td>
-                  <input
-                    type="number"
-                    name="homeScore"
-                    value={prediction.homeScore}
-                    onChange={(e) =>
-                      handleScoreChange(index, "homeScore", e.target.value)
-                    }
-                    required
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    name="awayScore"
-                    value={prediction.awayScore}
-                    onChange={(e) =>
-                      handleScoreChange(index, "awayScore", e.target.value)
-                    }
-                    required
-                  />
-                </td>
-                <td>{prediction.awayTeam}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button type="submit">Submit Predictions</button>
-      </form>
-    </div>
-  );
-};
-
-// Main Matchday Component
 const Matchday = () => {
   const { matchdayNumber } = useParams(); // Get matchday number from URL
   const [matches, setMatches] = useState([]);
@@ -412,7 +319,7 @@ const Matchday = () => {
 
   const handlePreviousMatchday = () => {
     const prevMatchday = parseInt(matchdayNumber) - 1;
-    if (prevMatchday <= 38) {
+    if (prevMatchday >= 1) {
       navigate(`/matchday/${prevMatchday}`);
     }
   };
@@ -541,7 +448,7 @@ const Matchday = () => {
         <p>No matches found for matchday {matchdayNumber}</p>
       )}
 
-      <div className="button-container">
+      <div className="navigation-buttons">
         <button className="matchday-button" onClick={handlePreviousMatchday}>
           Previous Matchday
         </button>
