@@ -94,10 +94,38 @@ const PredictScores = ({ matches, matchdayNumber }) => {
             {matches.map((match) => (
               <tr key={match.id}>
                 <td>
+                  <th className="mobile-only">Home Team: </th>
+                  <style>
+                    {`
+                      .mobile-only {
+                        display: none;
+                      }
+
+                      @media (max-width: 768px) {
+                        .mobile-only {
+                          display: inline;
+                        }
+                      }
+                    `}
+                  </style>
                   <img src={match.homeTeam.crest} alt={match.homeTeam.name} />
                   {match.homeTeam.name}
                 </td>
                 <td>
+                  <th className="mobile-only">Home Score </th>
+                  <style>
+                    {`
+                      .mobile-only {
+                        display: none;
+                      }
+
+                      @media (max-width: 768px) {
+                        .mobile-only {
+                          display: inline;
+                        }
+                      }
+                    `}
+                  </style>
                   <input
                     type="number"
                     name="homeTeamScore"
@@ -115,11 +143,39 @@ const PredictScores = ({ matches, matchdayNumber }) => {
                     style={{ width: "20px" }} // Adjust the width as needed
                   />
                 </td>
-                <td style={{ maxWidth: "30px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  <img src={match.awayTeam.crest} alt={match.awayTeam.name} style={{ maxWidth: "30px", height: "auto" }} />
+                <td>
+                  <th className="mobile-only">Away Team: </th>
+                  <style>
+                    {`
+                      .mobile-only {
+                        display: none;
+                      }
+
+                      @media (max-width: 768px) {
+                        .mobile-only {
+                          display: inline;
+                        }
+                      }
+                    `}
+                  </style>
+                  <img src={match.awayTeam.crest} alt={match.awayTeam.name} />
                   {match.awayTeam.name}
                 </td>
                 <td>
+                  <th className="mobile-only">Away Score </th>
+                  <style>
+                    {`
+                      .mobile-only {
+                        display: none;
+                      }
+
+                      @media (max-width: 768px) {
+                        .mobile-only {
+                          display: inline;
+                        }
+                      }
+                    `}
+                  </style>
                   <input
                     type="number"
                     name="awayTeamScore"
