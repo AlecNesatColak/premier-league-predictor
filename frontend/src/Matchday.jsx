@@ -271,7 +271,7 @@ const Matchday = () => {
       try {
         const response = await fetch(
           `${
-            import.meta.env.VITE_BACKEND_URL_DEV
+            import.meta.env.VITE_BACKEND_URL_PROD
           }/api/matchweek?matchday=${matchdayNumber}`
         );
         const data = await response.json();
