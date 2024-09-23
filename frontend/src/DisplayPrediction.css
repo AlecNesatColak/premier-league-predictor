@@ -181,6 +181,7 @@ button:hover {
     .prediction-table, .stats-table {
         display: block;
         width: 350px;
+        justify-content: end;
     }
 }
 
@@ -200,18 +201,26 @@ button:hover {
     display: block; /* Make all elements block to stack them */
   }
 
-  table tr {
-    margin-bottom: 10px; /* Add space between rows */
+  table thead {
+    display: none; /* Hide table headers */
   }
 
-  table th,
+  table tr {
+    margin-bottom: 10px; /* Add space between rows */
+    border: 1px solid #ddd; /* Add border for better separation */
+    border-radius: 5px; /* Add border radius for better look */
+    padding: 10px; /* Add padding for better spacing */
+  }
+
   table td {
-    text-align: right; /* Align text to the right for better readability */
-    padding-left: 50%; /* Create space for labels */
+    display: flex;
+    justify-content: space-between; /* Space out the content */
+    align-items: center; /* Center align items */
+    padding: 5px 0; /* Add padding for better touch targets */
+    text-align: left; /* Align text to the left */
     position: relative; /* Enable positioning of labels */
   }
 
-  table th::before,
   table td::before {
     content: attr(data-label); /* Use data-label attribute for labels */
     position: absolute; /* Position labels absolutely */
@@ -222,19 +231,29 @@ button:hover {
     font-weight: bold; /* Make labels bold */
   }
 
-  .prediction-table td, .stats-table td {
+  .team-column {
     display: flex;
-        justify-content: right;
-        padding: 5px 0;
-    }
+    align-items: center;
+  }
 
-@media (max-width: 480px) {
+  .team-column img {
+    margin-right: 10px;
+    flex-shrink: 0; /* Prevent the image from shrinking */
+  }
+
+  .prediction-table td, .stats-table {
+    justify-content: end;
+  }
+
+  table th.team-column, table td.team-column {
+    justify-content: end;
+  }
+
   table tr:nth-child(odd) {
-    background-color: rgba(216, 216, 216, 0.643); /* Slightly darker white for odd rows */
+    background-color: #efefef; /* Slightly darker white background for odd rows */
   }
 
-  table tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.036); /* Noticeably darker white for even rows */
+  .prediction-table td, .stats-table td {
+    justify-content: end;
   }
-}
 }

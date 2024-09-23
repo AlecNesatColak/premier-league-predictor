@@ -203,11 +203,40 @@ const DisplayMatchDayPredictions = ({
             return (
               <tr key={prediction.matchId}>
                 <td>
+                  <th className="mobile-only">Home Team: </th>
+                  <style>
+                    {`
+                      .mobile-only {
+                        display: none;
+                      }
+
+                      @media (max-width: 768px) {
+                        .mobile-only {
+                          display: inline;
+                        }
+                      }
+                    `}
+                  </style>
                   <img src={match.homeTeam.crest} alt={match.homeTeam.name} />
                   {match.homeTeam.name}
                 </td>
                 <td>
                   {isEditing ? (
+                    <>
+                    <th className="mobile-only">Home Score</th>
+                  <style>
+                    {`
+                      .mobile-only {
+                        display: none;
+                      }
+
+                      @media (max-width: 768px) {
+                        .mobile-only {
+                          display: inline;
+                        }
+                      }
+                    `}
+                  </style>
                     <input
                       type="number"
                       value={prediction.homeTeamScore}
@@ -220,17 +249,61 @@ const DisplayMatchDayPredictions = ({
                       }
                       style={{ width: "30px" }} // Adjust the width as needed
                       className="score-input" // Add a class for mobile width adjustment
-                    />
+                    /></>
                   ) : (
-                    prediction.homeTeamScore
+                    <>
+                    <th className="mobile-only">Home Score</th>
+                  <style>
+                    {`
+                      .mobile-only {
+                        display: none;
+                      }
+
+                      @media (max-width: 768px) {
+                        .mobile-only {
+                          display: inline;
+                        }
+                      }
+                    `}
+                  </style>
+                    {prediction.homeTeamScore}
+                    </>
                   )}
                 </td>
                 <td>
+                  <><th className="mobile-only">Away Team</th>
+                  <style>
+                    {`
+                      .mobile-only {
+                        display: none;
+                      }
+
+                      @media (max-width: 768px) {
+                        .mobile-only {
+                          display: inline;
+                        }
+                      }
+                    `}
+                  </style></>
                   <img src={match.awayTeam.crest} alt={match.awayTeam.name} />
                   {match.awayTeam.name}
                 </td>
                 <td>
-                  {isEditing ? (
+                  {isEditing ? (<>
+                  <th className="mobile-only">Home Score</th>
+                  <style>
+                    {`
+                      .mobile-only {
+                        display: none;
+                      }
+
+                      @media (max-width: 768px) {
+                        .mobile-only {
+                          display: inline;
+                        }
+                      }
+                    `}
+                  </style>
                     <input
                       type="number"
                       value={prediction.awayTeamScore}
@@ -243,14 +316,60 @@ const DisplayMatchDayPredictions = ({
                       }
                       style={{ width: "30px" }} // Adjust the width as needed
                     />
+                    </>
                   ) : (
-                    prediction.awayTeamScore
+                    <><th className="mobile-only">Away Score</th>
+                  <style>
+                    {`
+                      .mobile-only {
+                        display: none;
+                      }
+
+                      @media (max-width: 768px) {
+                        .mobile-only {
+                          display: inline;
+                        }
+                      }
+                    `}
+                  </style>
+                    {prediction.awayTeamScore}
+                    </>
                   )}
                 </td>
-                <td>
+                <td><>
+                <th className="mobile-only">Actual Score</th>
+                  <style>
+                    {`
+                      .mobile-only {
+                        display: none;
+                      }
+
+                      @media (max-width: 768px) {
+                        .mobile-only {
+                          display: inline;
+                        }
+                      }
+                    `}
+                  </style></>
                   {match.score.fullTime.home} - {match.score.fullTime.away}
                 </td>
                 <td>
+                  <>
+                <th className="mobile-only">Match Status</th>
+                  <style>
+                    {`
+                      .mobile-only {
+                        display: none;
+                      }
+
+                      @media (max-width: 768px) {
+                        .mobile-only {
+                          display: inline;
+                        }
+                      }
+                    `}
+                  </style>
+                </>
                   {match.status === "FINISHED" || match.status === "IN_PLAY"
                     ? match.status === "IN_PLAY"
                       ? "LIVE"
