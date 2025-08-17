@@ -355,14 +355,14 @@ app.delete("/delete-matchday-predictions", authenticateToken, async (req, res) =
 });
 
 // Serve the React front-end
-const __dirname = path.resolve(); // Get the root directory of the project
+if (process.env.SERVE_FRONTEND === "true") {
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, "/frontend/build")));
 
-// Serve static files from the React app build
-app.use(express.static(path.join(__dirname, "/frontend/build")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/frontend/build", "index.html"));
-});
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "/frontend/build", "index.html"));
+  });
+}
 
 const PORT = process.env.PORT;
 // Start the server and connect to the database
